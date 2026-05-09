@@ -1,1 +1,182 @@
-
+{
+  "updatedAt": "2026-05-09T06:54:36.860030+00:00",
+  "subtitle": "V12 代码审查修复版",
+  "market": {
+    "mode": "风控优先",
+    "summary": "V12 修复版本残留、同步模型计算、结果页缺失、生产状态显示、前端 Key 转发和缓存问题。"
+  },
+  "decision": {
+    "score": 89,
+    "conclusion": "V12 重点是代码审查和稳定性修复。真实数据仍需要 Worker 与 API Key。"
+  },
+  "indices": [
+    {
+      "name": "美股科技",
+      "value": "偏强"
+    },
+    {
+      "name": "A股情绪",
+      "value": "修复"
+    },
+    {
+      "name": "风控模式",
+      "value": "开启"
+    }
+  ],
+  "homeSignals": [
+    {
+      "icon": "🔑",
+      "title": "前端输入 Key",
+      "text": "设置页可保存 Tushare/EODHD/Finnhub Key 到本机浏览器。"
+    },
+    {
+      "icon": "🧪",
+      "title": "快速跑通测试",
+      "text": "Worker 可读取 Header Key，无需先配置 Cloudflare Secrets。"
+    }
+  ],
+  "tracks": [
+    {
+      "icon": "💾",
+      "name": "存储芯片",
+      "logic": "HBM、DRAM/NAND周期、国产替代共同驱动。",
+      "tag": "强赛道",
+      "score": 86,
+      "entry": "等回踩",
+      "risk": "中",
+      "rules": [
+        {
+          "text": "只在分歧后资金回流时提高优先级。"
+        },
+        {
+          "type": "warn",
+          "text": "若龙头放量滞涨，应降低仓位。"
+        }
+      ]
+    },
+    {
+      "icon": "🧠",
+      "name": "国产算力",
+      "logic": "AI资本开支、国产替代、云厂商需求是主要逻辑。",
+      "tag": "趋势强",
+      "score": 83,
+      "entry": "低吸",
+      "risk": "中高",
+      "rules": [
+        {
+          "text": "关注光模块、服务器、液冷等核心分支。"
+        },
+        {
+          "type": "risk",
+          "text": "估值偏高时不适合追涨。"
+        }
+      ]
+    },
+    {
+      "icon": "🏦",
+      "name": "高股息",
+      "logic": "适合防守和降低组合波动。",
+      "tag": "防守",
+      "score": 73,
+      "entry": "回调配置",
+      "risk": "中低",
+      "rules": [
+        {
+          "text": "适合在成长线波动放大时作为防守配置。"
+        }
+      ]
+    }
+  ],
+  "hotThemes": [
+    {
+      "name": "存储芯片",
+      "score": 88
+    },
+    {
+      "name": "AI算力",
+      "score": 84
+    },
+    {
+      "name": "高股息",
+      "score": 72
+    },
+    {
+      "name": "机器人",
+      "score": 68
+    }
+  ],
+  "hotNews": [
+    {
+      "icon": "🇺🇸",
+      "title": "美股映射",
+      "text": "科技龙头、半导体、AI基础设施影响A股相关方向情绪。",
+      "tag": "重要"
+    },
+    {
+      "icon": "💰",
+      "title": "资金持续",
+      "text": "同一主题连续放量且扩散，赛道评分提高。",
+      "tag": "跟踪"
+    },
+    {
+      "icon": "🧯",
+      "title": "情绪降温",
+      "text": "高开低走且龙头破位时，机会转为风险。",
+      "tag": "预警"
+    }
+  ],
+  "radar": {
+    "score": 83,
+    "discipline": "V4优先检查数据质量与路径。数据不完整、信号次数不足、Wilson下界偏低、PF不足或最大连亏过高时，一律阻断高置信建议。",
+    "cards": [
+      {
+        "icon": "🎯",
+        "title": "胜率门槛",
+        "text": "默认目标胜率90%，同时检查统计置信度。"
+      },
+      {
+        "icon": "📊",
+        "title": "趋势",
+        "text": "价格需站上关键均线。"
+      },
+      {
+        "icon": "⚡",
+        "title": "动量",
+        "text": "中短期动量必须共振。"
+      },
+      {
+        "icon": "🛡️",
+        "title": "风控",
+        "text": "回撤、波动、连亏和PF必须达标。"
+      }
+    ]
+  },
+  "risks": [
+    {
+      "title": "90%不是未来保证",
+      "level": "高",
+      "text": "模型中的90%是历史回测筛选门槛，不代表未来交易一定达到90%。"
+    },
+    {
+      "title": "信号次数不足",
+      "level": "中",
+      "text": "如果历史高置信信号太少，统计意义会下降。"
+    },
+    {
+      "title": "数据质量风险",
+      "level": "高",
+      "text": "复权、停牌、分红、基金净值延迟等问题会影响模型输出。"
+    },
+    {
+      "title": "系统性风险",
+      "level": "高",
+      "text": "极端行情、政策突变、流动性冲击可能导致模型失效。"
+    }
+  ],
+  "modelMarket": {
+    "riskScore": 58,
+    "breadthScore": 56,
+    "trendScore": 57,
+    "sentimentScore": 55
+  }
+}
