@@ -172,3 +172,11 @@ npx wrangler secret put FINNHUB_API_KEY
 ### 前端 Key 模式下的缓存
 
 V12 在 Header Key 模式下会跳过 Worker Cache，避免不同用户的 Key 请求结果被缓存混用。
+
+
+## V12.1 Debug 修复
+
+- 设置页可直接读取当前输入框中的 Worker Base URL，无需先刷新页面。
+- 保存 Worker Base URL 后会强制同步 market/asset API 到 Worker 路由。
+- 生产自检和数据源检查会校验 Worker URL 格式，并自动去除末尾 `/`。
+- Service Worker 缓存版本已更新，避免旧 app.js 被缓存命中。

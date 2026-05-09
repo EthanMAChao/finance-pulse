@@ -46,7 +46,7 @@ const staticChecks = {
   appRendersProductionBanner: app.includes('renderProductionBanner'),
   appRendersModelProfile: app.includes('model-profile-card'),
   appForwardsFrontendKeys: ['X-Tushare-Token','X-EODHD-Token','X-Finnhub-Key'].every(x=>app.includes(x)),
-  indexVersion: index.includes('Finance Pulse V12') && index.includes('V12 代码审查修复版'),
+  indexVersion: index.includes('Finance Pulse V12') && (index.includes('V12 代码审查修复版') || index.includes('V12.1 Worker URL 修复版')),
   swUniqueDecisionWorker: (sw.match(/decision-worker\.js/g)||[]).length === 1,
   workerHeaderKeySupport: ['X-Tushare-Token','X-EODHD-Token','X-Finnhub-Key','envWithHeaderKeys'].every(x=>worker.includes(x)),
   workerDiagnoseRoute: worker.includes('/diagnose') && worker.includes('handleDiagnose'),

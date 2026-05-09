@@ -1,4 +1,4 @@
-const APP_VERSION = "V12";
+const APP_VERSION = "V12.1";
 const DEFAULT_MARKET_API_URL = "./data/market.json";
 const DEFAULT_ASSET_API_URL = "./data/assets.json";
 const STORAGE_KEYS = {
@@ -11,12 +11,14 @@ const STORAGE_KEYS = {
   tushareKey: "fp_v12_tushare_key",
   eodhdKey: "fp_v12_eodhd_key",
   finnhubKey: "fp_v12_finnhub_key",
+  workerBaseUrl: "fp_v12_worker_base_url",
   legacy: {
     marketApiUrl: "fp_v3_market_api",
     assetApiUrl: "fp_v3_asset_api",
     tushareKey: "fp_v11_tushare_key",
     eodhdKey: "fp_v11_eodhd_key",
-    finnhubKey: "fp_v11_finnhub_key"
+    finnhubKey: "fp_v11_finnhub_key",
+    workerBaseUrl: "workerBaseUrl"
   }
 };
 
@@ -35,6 +37,28 @@ function clamp(v, min, max) { return Math.max(min, Math.min(max, Number(v) || 0)
 function getStorage(key) { return localStorage.getItem(key) || localStorage.getItem(STORAGE_KEYS.legacy?.[Object.keys(STORAGE_KEYS).find(k => STORAGE_KEYS[k] === key)] || "") || ""; }
 function getMarketApiUrl() { return localStorage.getItem(STORAGE_KEYS.marketApiUrl) || localStorage.getItem(STORAGE_KEYS.legacy.marketApiUrl) || DEFAULT_MARKET_API_URL; }
 function getAssetApiUrl() { return localStorage.getItem(STORAGE_KEYS.assetApiUrl) || localStorage.getItem(STORAGE_KEYS.legacy.assetApiUrl) || DEFAULT_ASSET_API_URL; }
+function normalizeWorkerUrl(url) { return String(url || "").trim().replace(/\/+$/, ""); }
+function getWorkerBaseUrl() {
+  return normalizeWorkerUrl(
+    localStorage.getItem(STORAGE_KEYS.workerBaseUrl) ||
+    localStorage.getItem("financePulse.workerBaseUrl") ||
+    localStorage.getItem(STORAGE_KEYS.legacy.workerBaseUrl) ||
+    ""
+  );
+}
+function getWorkerBaseUrlFromInputOrStorage() {
+  const inputValue = $("workerBaseUrlInput")?.value;
+  return normalizeWorkerUrl(inputValue || getWorkerBaseUrl());
+}
+function looksLikeWorkerRoot(url) {
+  return /^https?:\/\/[^\s/]+(?:\/[^\s?#]+)*$/i.test(String(url || ""));
+}
+function getFrontendKey(key, legacyKey, compatKey = "") {
+  return localStorage.getItem(key) ||
+    (compatKey ? localStorage.getItem(compatKey) : "") ||
+    localStorage.getItem(legacyKey) ||
+    "";
+}
 function isDefaultStaticAssetSource() { const u = getAssetApiUrl(); return u === DEFAULT_ASSET_API_URL || u.endsWith("/data/assets.json") || u.endsWith("data/assets.json"); }
 function buildUrl(url, symbol) { return symbol && url.includes("{symbol}") ? url.replaceAll("{symbol}", encodeURIComponent(symbol)) : url; }
 function scoreClass(score) { return score >= 75 ? "up" : score >= 55 ? "flat" : "down"; }
@@ -56,12 +80,18 @@ function setLoading(btn, loading) { if (!btn) return; btn.disabled = loading; bt
 
 function frontendKeyHeaders() {
   const headers = {};
-  const t = localStorage.getItem(STORAGE_KEYS.tushareKey) || localStorage.getItem(STORAGE_KEYS.legacy.tushareKey) || "";
-  const e = localStorage.getItem(STORAGE_KEYS.eodhdKey) || localStorage.getItem(STORAGE_KEYS.legacy.eodhdKey) || "";
-  const f = localStorage.getItem(STORAGE_KEYS.finnhubKey) || localStorage.getItem(STORAGE_KEYS.legacy.finnhubKey) || "";
+  const t = getFrontendKey(STORAGE_KEYS.tushareKey, STORAGE_KEYS.legacy.tushareKey, "financePulse.tushareToken");
+  const e = getFrontendKey(STORAGE_KEYS.eodhdKey, STORAGE_KEYS.legacy.eodhdKey, "financePulse.eodhdApiKey");
+  const f = getFrontendKey(STORAGE_KEYS.finnhubKey, STORAGE_KEYS.legacy.finnhubKey, "financePulse.finnhubApiKey");
   if (t) headers["X-Tushare-Token"] = t;
-  if (e) headers["X-EODHD-Token"] = e;
-  if (f) headers["X-Finnhub-Key"] = f;
+  if (e) {
+    headers["X-EODHD-Token"] = e;
+    headers["X-EODHD-API-Key"] = e;
+  }
+  if (f) {
+    headers["X-Finnhub-Key"] = f;
+    headers["X-Finnhub-API-Key"] = f;
+  }
   return headers;
 }
 async function fetchJson(url) {
@@ -233,12 +263,196 @@ function initNavigation() { document.querySelectorAll(".nav-item").forEach(btn =
 
 async function runDiagnostics() { const set=(id,text,cls)=>{const el=$(id); if(el){el.textContent=text; el.className=cls||"";}}; async function test(url){try{const r=await fetch(url+(url.includes("?")?"&":"?")+"diag="+Date.now(),{cache:"no-store"}); if(!r.ok)return "HTTP "+r.status; await r.json(); return "正常";}catch{return "失败";}} const m=await test("./data/market.json"), a=await test("./data/assets.json"); set("diagMarket",m,m==="正常"?"up":"down"); set("diagAssets",a,a==="正常"?"up":"down"); set("diagSW","serviceWorker" in navigator ? "支持" : "不支持","serviceWorker" in navigator ? "up":"down"); set("diagCache",APP_VERSION,"up"); showToast(m==="正常"&&a==="正常"?"数据路径正常":"数据路径存在问题"); }
 async function clearLocalCache() { Object.values(STORAGE_KEYS).forEach(v => { if (typeof v === "string") localStorage.removeItem(v); }); if ("caches" in window) { const keys = await caches.keys(); await Promise.all(keys.map(k => caches.delete(k))); } showToast("本地缓存已清理，请刷新页面"); }
-function workerBaseFromApi() { const candidate = getMarketApiUrl().startsWith("http") ? getMarketApiUrl() : (getAssetApiUrl().startsWith("http") ? getAssetApiUrl() : ""); if (!candidate) return ""; try { return new URL(candidate).origin; } catch { return ""; } }
-async function checkProviderStatus() { const base=workerBaseFromApi(); const set=(id,text,cls)=>{const el=$(id); if(el){el.textContent=text; el.className=cls||"";}}; if(!base){ set("providerMode","未配置 Worker","warn"); set("providerTushare","未检查","warn"); set("providerEodhd","未检查","warn"); set("providerFinnhub","未检查","warn"); showToast("请先填写 Worker API 地址"); return; } try { const data = await fetchJson(base + "/health"); const providers=data.providers||{}; set("providerMode",data.keyMode || data.mode || "Worker","up"); set("providerTushare",providers.tushare?"已配置":"未配置",providers.tushare?"up":"warn"); set("providerEodhd",providers.eodhd?"已配置":"未配置",providers.eodhd?"up":"warn"); set("providerFinnhub",providers.finnhub?"已配置":"未配置",providers.finnhub?"up":"warn"); showToast("数据源状态已更新"); } catch(e) { set("providerMode","连接失败","down"); showToast("Worker 健康检查失败"); } }
-async function runProductionCheck() { const base=workerBaseFromApi(); const set=(id,text,cls)=>{const el=$(id); if(el){el.textContent=text; el.className=cls||"";}}; if(!base){ set("prodHealth","未配置","down"); set("prodCN","未配置","down"); set("prodUS","未配置","down"); set("prodMode","未通过","down"); showToast("请先配置 Worker API 地址"); return; } async function check(path){try{const data=await fetchJson(base+path); return {ok:true,data};}catch(e){return {ok:false,error:e.message};}} const h=await check("/health"), cn=await check("/diagnose?symbol=600845"), us=await check("/diagnose?symbol=AAPL"); const cnOk=cn.ok&&cn.data?.productionReady, usOk=us.ok&&us.data?.productionReady; set("prodHealth",h.ok?"正常":"失败",h.ok?"up":"down"); set("prodCN",cnOk?"通过":(cn.ok?"未达标":"失败"),cnOk?"up":(cn.ok?"warn":"down")); set("prodUS",usOk?"通过":(us.ok?"未达标":"失败"),usOk?"up":(us.ok?"warn":"down")); const all=h.ok&&cnOk&&usOk; set("prodMode",all?"可实际应用":"未通过",all?"up":"down"); showToast(all?"生产自检通过":"生产自检未通过"); }
-function fillWorkerUrls() { const example = "https://你的worker.workers.dev"; if ($("marketApiUrlInput")) $("marketApiUrlInput").value = example + "/market"; if ($("assetApiUrlInput")) $("assetApiUrlInput").value = example + "/asset?symbol={symbol}"; showToast("已填入 Worker 接口格式，请替换域名"); }
-function maskKey(v){ if(!v)return ""; return v.length<=8 ? "已保存" : v.slice(0,4)+"****"+v.slice(-4); }
-function initFrontendKeySettings(){ const t=$("tushareKeyInput"), e=$("eodhdKeyInput"), f=$("finnhubKeyInput"); if(!t||!e||!f)return; t.placeholder=localStorage.getItem(STORAGE_KEYS.tushareKey)?`已保存：${maskKey(localStorage.getItem(STORAGE_KEYS.tushareKey))}`:"输入 Tushare Token，仅保存在本机浏览器"; e.placeholder=localStorage.getItem(STORAGE_KEYS.eodhdKey)?`已保存：${maskKey(localStorage.getItem(STORAGE_KEYS.eodhdKey))}`:"输入 EODHD API Token，仅保存在本机浏览器"; f.placeholder=localStorage.getItem(STORAGE_KEYS.finnhubKey)?`已保存：${maskKey(localStorage.getItem(STORAGE_KEYS.finnhubKey))}`:"输入 Finnhub API Key，仅保存在本机浏览器"; if($("saveFrontendKeysBtn")) $("saveFrontendKeysBtn").onclick=()=>{ if(t.value.trim())localStorage.setItem(STORAGE_KEYS.tushareKey,t.value.trim()); if(e.value.trim())localStorage.setItem(STORAGE_KEYS.eodhdKey,e.value.trim()); if(f.value.trim())localStorage.setItem(STORAGE_KEYS.finnhubKey,f.value.trim()); t.value="";e.value="";f.value="";initFrontendKeySettings();showToast("API Key 已保存到本机");}; if($("clearFrontendKeysBtn")) $("clearFrontendKeysBtn").onclick=()=>{ [STORAGE_KEYS.tushareKey,STORAGE_KEYS.eodhdKey,STORAGE_KEYS.finnhubKey,STORAGE_KEYS.legacy.tushareKey,STORAGE_KEYS.legacy.eodhdKey,STORAGE_KEYS.legacy.finnhubKey].forEach(k=>localStorage.removeItem(k)); t.value="";e.value="";f.value="";initFrontendKeySettings();showToast("本机 API Key 已清除");}; }
+function setStatus(id, text, cls = "") {
+  const el = $(id);
+  if (!el) return;
+  el.textContent = text;
+  el.className = cls || "";
+}
+
+function workerBaseFromApi() {
+  const configured = getWorkerBaseUrlFromInputOrStorage();
+  if (configured) return configured;
+  const candidate = getMarketApiUrl().startsWith("http") ? getMarketApiUrl() : (getAssetApiUrl().startsWith("http") ? getAssetApiUrl() : "");
+  if (!candidate) return "";
+  try {
+    const u = new URL(candidate);
+    const path = u.pathname.replace(/\/(market|asset|quote|diagnose|health|provider\/test)\/?$/i, "");
+    return normalizeWorkerUrl(u.origin + path);
+  } catch { return ""; }
+}
+
+function saveWorkerDerivedApiUrls(base, force = false) {
+  const workerBaseUrl = normalizeWorkerUrl(base);
+  if (!workerBaseUrl) return;
+  const currentMarket = getMarketApiUrl();
+  const currentAsset = getAssetApiUrl();
+  if (force || currentMarket === DEFAULT_MARKET_API_URL || currentMarket.endsWith("/data/market.json") || currentMarket.endsWith("data/market.json")) {
+    localStorage.setItem(STORAGE_KEYS.marketApiUrl, `${workerBaseUrl}/market`);
+    if ($("marketApiUrlInput")) $("marketApiUrlInput").value = `${workerBaseUrl}/market`;
+  }
+  if (force || currentAsset === DEFAULT_ASSET_API_URL || currentAsset.endsWith("/data/assets.json") || currentAsset.endsWith("data/assets.json")) {
+    localStorage.setItem(STORAGE_KEYS.assetApiUrl, `${workerBaseUrl}/asset?symbol={symbol}`);
+    if ($("assetApiUrlInput")) $("assetApiUrlInput").value = `${workerBaseUrl}/asset?symbol={symbol}`;
+  }
+}
+
+async function checkEndpoint(id, url, okText = "通过", failText = "失败") {
+  try {
+    setStatus(id, "检查中...", "warn");
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 12000);
+    const r = await fetch(url + (url.includes("?") ? "&" : "?") + "t=" + Date.now(), {
+      cache: "no-store",
+      headers: frontendKeyHeaders(),
+      signal: controller.signal
+    });
+    clearTimeout(timer);
+    const data = await r.json().catch(() => ({}));
+    if (!r.ok || data.ok === false || data.error) {
+      const msg = data.error || data.message || `HTTP ${r.status}`;
+      setStatus(id, `${failText}：${msg}`, "down");
+      return { ok: false, data, error: msg };
+    }
+    setStatus(id, okText, "up");
+    return { ok: true, data };
+  } catch (e) {
+    const msg = e?.name === "AbortError" ? "超时" : (e?.message || "请求失败");
+    setStatus(id, `${failText}：${msg}`, "down");
+    return { ok: false, error: msg };
+  }
+}
+
+function refreshProviderStatusWithoutRequest() {
+  const base = getWorkerBaseUrlFromInputOrStorage();
+  const h = frontendKeyHeaders();
+  if (!base) {
+    setStatus("providerMode", "未配置 Worker", "warn");
+    setStatus("prodHealth", "未配置", "down");
+    setStatus("prodCN", "未配置", "down");
+    setStatus("prodUS", "未配置", "down");
+    setStatus("prodMode", "未通过", "down");
+  } else {
+    setStatus("providerMode", "Worker 已配置", "up");
+  }
+  setStatus("providerTushare", h["X-Tushare-Token"] ? (base ? "已填 Key，待检查" : "已填 Key，但未配置 Worker") : "未填 Key", h["X-Tushare-Token"] && base ? "warn" : "down");
+  setStatus("providerEodhd", h["X-EODHD-Token"] ? (base ? "已填 Key，待检查" : "已填 Key，但未配置 Worker") : "未填 Key", h["X-EODHD-Token"] && base ? "warn" : "down");
+  setStatus("providerFinnhub", h["X-Finnhub-Key"] ? (base ? "已填 Key，待检查" : "已填 Key，但未配置 Worker") : "未填 Key", h["X-Finnhub-Key"] && base ? "warn" : "down");
+}
+
+async function checkProviderStatus() {
+  const base = workerBaseFromApi();
+  if (!base) {
+    refreshProviderStatusWithoutRequest();
+    showToast("请先填写 Worker Base URL");
+    return;
+  }
+  if (!looksLikeWorkerRoot(base)) {
+    setStatus("providerMode", "Worker URL 格式异常", "down");
+    showToast("Worker Base URL 需要以 http:// 或 https:// 开头");
+    return;
+  }
+  localStorage.setItem(STORAGE_KEYS.workerBaseUrl, base);
+  localStorage.setItem("financePulse.workerBaseUrl", base);
+  if ($("workerBaseUrlInput")) $("workerBaseUrlInput").value = base;
+  saveWorkerDerivedApiUrls(base, true);
+  setStatus("providerMode", "Worker 已配置", "up");
+  const health = await checkEndpoint("providerMode", `${base}/health`, "Worker 已连接", "连接失败");
+  const providers = health.data?.providers || {};
+  const keyMode = health.data?.keyMode || health.data?.mode || "Worker";
+  if (health.ok) setStatus("providerMode", keyMode, "up");
+  await checkEndpoint("providerTushare", `${base}/provider/test?provider=tushare`, providers.tushare ? "通过" : "未配置", providers.tushare ? "失败" : "未配置");
+  await checkEndpoint("providerEodhd", `${base}/provider/test?provider=eodhd`, providers.eodhd ? "通过" : "未配置", providers.eodhd ? "失败" : "未配置");
+  await checkEndpoint("providerFinnhub", `${base}/provider/test?provider=finnhub`, providers.finnhub ? "通过" : "未配置", providers.finnhub ? "失败" : "未配置");
+  showToast("数据源状态已更新");
+}
+
+async function runProductionCheck() {
+  const base = workerBaseFromApi();
+  if (!base) {
+    setStatus("prodHealth", "未配置", "down");
+    setStatus("prodCN", "未配置", "down");
+    setStatus("prodUS", "未配置", "down");
+    setStatus("prodMode", "未通过", "down");
+    showToast("请先填写 Worker Base URL");
+    return;
+  }
+  if (!looksLikeWorkerRoot(base)) {
+    setStatus("prodHealth", "Worker URL 格式异常", "down");
+    setStatus("prodCN", "未检查", "down");
+    setStatus("prodUS", "未检查", "down");
+    setStatus("prodMode", "未通过", "down");
+    showToast("Worker Base URL 需要以 http:// 或 https:// 开头");
+    return;
+  }
+  localStorage.setItem(STORAGE_KEYS.workerBaseUrl, base);
+  if ($("workerBaseUrlInput")) $("workerBaseUrlInput").value = base;
+  saveWorkerDerivedApiUrls(base, true);
+  const h = await checkEndpoint("prodHealth", `${base}/health`, "通过", "失败");
+  const cn = await checkEndpoint("prodCN", `${base}/diagnose?symbol=600845`, "通过", "失败");
+  const us = await checkEndpoint("prodUS", `${base}/diagnose?symbol=AAPL`, "通过", "失败");
+  const cnReady = cn.ok && cn.data?.productionReady;
+  const usReady = us.ok && us.data?.productionReady;
+  if (cn.ok && !cnReady) setStatus("prodCN", "未达标", "warn");
+  if (us.ok && !usReady) setStatus("prodUS", "未达标", "warn");
+  const all = h.ok && cnReady && usReady;
+  setStatus("prodMode", all ? "可实际应用" : "未通过", all ? "up" : "down");
+  showToast(all ? "生产自检通过" : "生产自检未通过");
+}
+
+function fillWorkerUrls() {
+  const example = "https://你的worker.workers.dev";
+  if ($("workerBaseUrlInput")) $("workerBaseUrlInput").value = example;
+  if ($("marketApiUrlInput")) $("marketApiUrlInput").value = example + "/market";
+  if ($("assetApiUrlInput")) $("assetApiUrlInput").value = example + "/asset?symbol={symbol}";
+  showToast("已填入 Worker 接口格式，请替换域名");
+}
+
+function initFrontendKeySettings() {
+  const w = $("workerBaseUrlInput"), t = $("tushareKeyInput"), e = $("eodhdKeyInput"), f = $("finnhubKeyInput");
+  if (!t || !e || !f) return;
+  if (w) w.value = getWorkerBaseUrl();
+  const savedT = getFrontendKey(STORAGE_KEYS.tushareKey, STORAGE_KEYS.legacy.tushareKey, "financePulse.tushareToken");
+  const savedE = getFrontendKey(STORAGE_KEYS.eodhdKey, STORAGE_KEYS.legacy.eodhdKey, "financePulse.eodhdApiKey");
+  const savedF = getFrontendKey(STORAGE_KEYS.finnhubKey, STORAGE_KEYS.legacy.finnhubKey, "financePulse.finnhubApiKey");
+  t.placeholder = savedT ? `已保存：${maskKey(savedT)}` : "输入 Tushare Token，仅保存在本机浏览器";
+  e.placeholder = savedE ? `已保存：${maskKey(savedE)}` : "输入 EODHD API Token，仅保存在本机浏览器";
+  f.placeholder = savedF ? `已保存：${maskKey(savedF)}` : "输入 Finnhub API Key，仅保存在本机浏览器";
+  if ($("saveFrontendKeysBtn")) $("saveFrontendKeysBtn").onclick = () => {
+    const base = normalizeWorkerUrl(w?.value || getWorkerBaseUrl());
+    if (base) {
+      if (!looksLikeWorkerRoot(base)) {
+        showToast("Worker Base URL 格式不正确");
+        return;
+      }
+      localStorage.setItem(STORAGE_KEYS.workerBaseUrl, base);
+      localStorage.setItem("financePulse.workerBaseUrl", base);
+      localStorage.setItem("workerBaseUrl", base);
+      if (w) w.value = base;
+      saveWorkerDerivedApiUrls(base, true);
+    }
+    if (t.value.trim()) { localStorage.setItem(STORAGE_KEYS.tushareKey, t.value.trim()); localStorage.setItem("financePulse.tushareToken", t.value.trim()); }
+    if (e.value.trim()) { localStorage.setItem(STORAGE_KEYS.eodhdKey, e.value.trim()); localStorage.setItem("financePulse.eodhdApiKey", e.value.trim()); }
+    if (f.value.trim()) { localStorage.setItem(STORAGE_KEYS.finnhubKey, f.value.trim()); localStorage.setItem("financePulse.finnhubApiKey", f.value.trim()); }
+    t.value = ""; e.value = ""; f.value = "";
+    initFrontendKeySettings();
+    refreshProviderStatusWithoutRequest();
+    showToast("Worker URL / API Key 已保存到本机");
+  };
+  if ($("clearFrontendKeysBtn")) $("clearFrontendKeysBtn").onclick = () => {
+    [
+      STORAGE_KEYS.tushareKey, STORAGE_KEYS.eodhdKey, STORAGE_KEYS.finnhubKey, STORAGE_KEYS.workerBaseUrl,
+      STORAGE_KEYS.legacy.tushareKey, STORAGE_KEYS.legacy.eodhdKey, STORAGE_KEYS.legacy.finnhubKey, STORAGE_KEYS.legacy.workerBaseUrl,
+      "financePulse.tushareToken", "financePulse.eodhdApiKey", "financePulse.finnhubApiKey", "financePulse.workerBaseUrl", "workerBaseUrl"
+    ].forEach(k => localStorage.removeItem(k));
+    if (w) w.value = "";
+    t.value = ""; e.value = ""; f.value = "";
+    initFrontendKeySettings();
+    refreshProviderStatusWithoutRequest();
+    showToast("本机 Worker URL / API Key 已清除");
+  };
+  refreshProviderStatusWithoutRequest();
+}
 
 function initSettings() { initFrontendKeySettings(); if($("marketApiUrlInput")) $("marketApiUrlInput").value=getMarketApiUrl(); if($("assetApiUrlInput")) $("assetApiUrlInput").value=getAssetApiUrl(); if($("saveMarketApiBtn")) $("saveMarketApiBtn").onclick=()=>{localStorage.setItem(STORAGE_KEYS.marketApiUrl,$("marketApiUrlInput").value.trim()||DEFAULT_MARKET_API_URL);fetchMarketData();}; if($("resetMarketApiBtn")) $("resetMarketApiBtn").onclick=()=>{localStorage.removeItem(STORAGE_KEYS.marketApiUrl);$("marketApiUrlInput").value=DEFAULT_MARKET_API_URL;fetchMarketData();}; if($("saveAssetApiBtn")) $("saveAssetApiBtn").onclick=async()=>{localStorage.setItem(STORAGE_KEYS.assetApiUrl,$("assetApiUrlInput").value.trim()||DEFAULT_ASSET_API_URL);appState.assetsData=null;await loadAssetUniverse();showToast("资产数据源已保存");}; if($("resetAssetApiBtn")) $("resetAssetApiBtn").onclick=async()=>{localStorage.removeItem(STORAGE_KEYS.assetApiUrl);$("assetApiUrlInput").value=DEFAULT_ASSET_API_URL;appState.assetsData=null;await loadAssetUniverse();showToast("资产数据源已恢复");}; document.querySelectorAll(".switch").forEach(sw=>{const key=sw.dataset.setting;const sk=key==="riskFirst"?STORAGE_KEYS.riskFirst:STORAGE_KEYS.autoRefresh;if(localStorage.getItem(sk)==="false")sw.classList.remove("on");sw.onclick=()=>{sw.classList.toggle("on");localStorage.setItem(sk,sw.classList.contains("on")?"true":"false");setupAutoRefresh();};}); if($("runDiagBtn")) $("runDiagBtn").onclick=runDiagnostics; if($("clearCacheBtn")) $("clearCacheBtn").onclick=clearLocalCache; if($("checkProviderBtn")) $("checkProviderBtn").onclick=checkProviderStatus; if($("runProdCheckBtn")) $("runProdCheckBtn").onclick=runProductionCheck; if($("useWorkerMarketBtn")) $("useWorkerMarketBtn").onclick=fillWorkerUrls; if($("useWorkerAssetBtn")) $("useWorkerAssetBtn").onclick=fillWorkerUrls; }
 function setupInstallButton(){ window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();appState.deferredPrompt=e;}); if($("installBtn")) $("installBtn").onclick=async()=>{ if(appState.deferredPrompt){appState.deferredPrompt.prompt(); await appState.deferredPrompt.userChoice; appState.deferredPrompt=null;} else showToast("请用浏览器菜单添加到主屏幕"); }; }

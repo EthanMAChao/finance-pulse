@@ -20,7 +20,7 @@
         <div class="logo">FP</div>
         <div>
           <h1>Finance Pulse</h1>
-          <p id="subTitle">V12 代码审查修复版</p>
+          <p id="subTitle">V12.1 Worker URL 修复版</p>
         </div>
       </div>
       <button class="refresh" id="refreshBtn" type="button">刷新</button>
@@ -235,6 +235,9 @@
           <h3>前端输入 API Key</h3>
           <span>个人测试</span>
         </div>
+        <label class="field-label">Worker Base URL</label>
+        <input id="workerBaseUrlInput" class="input" type="url" autocomplete="off" placeholder="例如 https://finance-pulse-worker.xxx.workers.dev" />
+        <p class="help-text compact-help">填写 Cloudflare Worker 根地址，不要填写 /health、/market 或 /asset 路径。</p>
         <label class="field-label">Tushare Token</label>
         <input id="tushareKeyInput" class="input" type="password" autocomplete="off" placeholder="输入 Tushare Token，仅保存在本机浏览器" />
         <label class="field-label">EODHD API Token</label>
@@ -255,7 +258,7 @@
           <div class="diag-item"><span>market.json</span><b id="diagMarket">未检查</b></div>
           <div class="diag-item"><span>assets.json</span><b id="diagAssets">未检查</b></div>
           <div class="diag-item"><span>Service Worker</span><b id="diagSW">未检查</b></div>
-          <div class="diag-item"><span>缓存版本</span><b id="diagCache">V12</b></div>
+          <div class="diag-item"><span>缓存版本</span><b id="diagCache">V12.1</b></div>
         </div>
         <button class="secondary-btn" id="runDiagBtn" type="button">检查数据路径</button>
         <button class="secondary-btn" id="clearCacheBtn" type="button">清理本地缓存</button>
