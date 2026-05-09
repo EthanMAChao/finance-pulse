@@ -1,10 +1,10 @@
-// Finance Pulse V5 Cloudflare Worker
+// Finance Pulse V8 Cloudflare Worker
 // Routes:
 //   /health
 //   /market
 //   /asset?symbol=600845
 //
-// This template uses public Yahoo Finance chart endpoints and Google News RSS.
+// This template uses public Yahoo Finance chart endpoints and Google News RSS as a demo provider.
 // For production, replace upstreams with licensed market-data/news providers.
 
 const CORS_HEADERS = {
@@ -129,7 +129,7 @@ async function handleMarket() {
   }
   return json({
     updatedAt: new Date().toISOString(),
-    subtitle: "V5 动态行情 · 行业模型",
+    subtitle: "V8 全市场路由 · 已测试",
     market: {
       mode: "动态刷新",
       summary: "市场数据来自 Worker 后端实时抓取。主题热度应替换为你的正式行情/行业资金流数据源。"
