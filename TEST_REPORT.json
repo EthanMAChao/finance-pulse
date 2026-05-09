@@ -1,907 +1,897 @@
 {
-  "version": "V10",
-  "generatedAt": "2026-05-09T06:35:32.722833+00:00",
+  "version": "V12",
+  "generatedAt": "2026-05-09T06:55:14.460340+00:00",
   "allPassed": true,
   "summary": {
+    "version": "V12",
     "modelSymbols": 26,
     "modelRuns": 3,
-    "workerSyntaxChecked": true,
-    "diagnoseRoutePresent": true,
-    "demoHighConfidenceBlocked": true
+    "syntaxChecks": [
+      "app.js",
+      "model.js",
+      "decision-worker.js",
+      "api/finance-worker.js"
+    ],
+    "allPassed": true,
+    "staticChecks": {
+      "appUsesWebWorker": true,
+      "appRendersProductionBanner": true,
+      "appRendersModelProfile": true,
+      "appForwardsFrontendKeys": true,
+      "indexVersion": true,
+      "swUniqueDecisionWorker": true,
+      "workerHeaderKeySupport": true,
+      "workerDiagnoseRoute": true
+    },
+    "prodAssetProductionReady": true
   },
   "runs": [
     {
-      "name": "model-run-1",
+      "name": "full-review-run-1",
       "exitCode": 0,
-      "stdout": "{\n  \"159915\": {\n    \"ok\": true,\n    \"profile\": \"宽基ETF模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 53,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"300124\": {\n    \"ok\": true,\n    \"profile\": \"机器人/高端制造模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 69,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"300750\": {\n    \"ok\": true,\n    \"profile\": \"新能源/电动车模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 38,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"512000\": {\n    \"ok\": true,\n    \"profile\": \"行业ETF模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 61,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"512010\": {\n    \"ok\": true,\n    \"profile\": \"行业ETF模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 41,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"512480\": {\n    \"ok\": true,\n    \"profile\": \"行业ETF模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 42,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"513100\": {\n    \"ok\": true,\n    \"profile\": \"债券/黄金/QDII模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 47,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"515790\": {\n    \"ok\": true,\n    \"profile\": \"行业ETF模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 49,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"518880\": {\n    \"ok\": true,\n    \"profile\": \"债券/黄金/QDII模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 50,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"600030\": {\n    \"ok\": true,\n    \"profile\": \"券商/金融弹性模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 59,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"600036\": {\n    \"ok\": true,\n    \"profile\": \"银行/保险模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 56,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"600050\": {\n    \"ok\": true,\n    \"profile\": \"公用事业/红利模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 29,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"600276\": {\n    \"ok\": true,\n    \"profile\": \"医药/生物模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 26,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"600519\": {\n    \"ok\": true,\n    \"profile\": \"消费/白酒模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 72,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"600845\": {\n    \"ok\": true,\n    \"profile\": \"AI/软件模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 72,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"600900\": {\n    \"ok\": true,\n    \"profile\": \"银行/保险模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 70,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"601012\": {\n    \"ok\": true,\n    \"profile\": \"新能源/电动车模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 69,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"601088\": {\n    \"ok\": true,\n    \"profile\": \"银行/保险模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 67,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"601318\": {\n    \"ok\": true,\n    \"profile\": \"银行/保险模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 75,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"601398\": {\n    \"ok\": true,\n    \"profile\": \"银行/保险模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 76,\n    \"action\": \"等待回踩确认\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"603259\": {\n    \"ok\": true,\n    \"profile\": \"医药/生物模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 27,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"688185\": {\n    \"ok\": true,\n    \"profile\": \"医药/生物模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 58,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"002230\": {\n    \"ok\": true,\n    \"profile\": \"AI/软件模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 59,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"002594\": {\n    \"ok\": true,\n    \"profile\": \"新能源/电动车模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 36,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"002415\": {\n    \"ok\": true,\n    \"profile\": \"AI/软件模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 64,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"DEMO_CYCLE\": {\n    \"ok\": true,\n    \"profile\": \"通用稳健模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"unknown\",\n    \"productionReady\": false,\n    \"score\": 49,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  }\n}\n",
+      "stdout": "{\n  \"results\": {\n    \"159915\": {\n      \"ok\": true,\n      \"profile\": \"宽基ETF模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"300124\": {\n      \"ok\": true,\n      \"profile\": \"机器人/高端制造模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"300750\": {\n      \"ok\": true,\n      \"profile\": \"新能源/电动车模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"512000\": {\n      \"ok\": true,\n      \"profile\": \"行业ETF模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"512010\": {\n      \"ok\": true,\n      \"profile\": \"行业ETF模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"512480\": {\n      \"ok\": true,\n      \"profile\": \"行业ETF模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"513100\": {\n      \"ok\": true,\n      \"profile\": \"债券/黄金/QDII模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"515790\": {\n      \"ok\": true,\n      \"profile\": \"行业ETF模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"518880\": {\n      \"ok\": true,\n      \"profile\": \"债券/黄金/QDII模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"600030\": {\n      \"ok\": true,\n      \"profile\": \"券商/金融弹性模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"600036\": {\n      \"ok\": true,\n      \"profile\": \"银行/保险模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"600050\": {\n      \"ok\": true,\n      \"profile\": \"公用事业/红利模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"600276\": {\n      \"ok\": true,\n      \"profile\": \"医药/生物模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"600519\": {\n      \"ok\": true,\n      \"profile\": \"消费/白酒模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"600845\": {\n      \"ok\": true,\n      \"profile\": \"AI/软件模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"600900\": {\n      \"ok\": true,\n      \"profile\": \"银行/保险模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"601012\": {\n      \"ok\": true,\n      \"profile\": \"新能源/电动车模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"601088\": {\n      \"ok\": true,\n      \"profile\": \"银行/保险模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"601318\": {\n      \"ok\": true,\n      \"profile\": \"银行/保险模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"601398\": {\n      \"ok\": true,\n      \"profile\": \"银行/保险模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"等待回踩确认\"\n    },\n    \"603259\": {\n      \"ok\": true,\n      \"profile\": \"医药/生物模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"688185\": {\n      \"ok\": true,\n      \"profile\": \"医药/生物模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"002230\": {\n      \"ok\": true,\n      \"profile\": \"AI/软件模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"002594\": {\n      \"ok\": true,\n      \"profile\": \"新能源/电动车模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"002415\": {\n      \"ok\": true,\n      \"profile\": \"AI/软件模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"DEMO_CYCLE\": {\n      \"ok\": true,\n      \"profile\": \"通用稳健模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    }\n  },\n  \"prodAssetProductionReady\": true,\n  \"staticChecks\": {\n    \"appUsesWebWorker\": true,\n    \"appRendersProductionBanner\": true,\n    \"appRendersModelProfile\": true,\n    \"appForwardsFrontendKeys\": true,\n    \"indexVersion\": true,\n    \"swUniqueDecisionWorker\": true,\n    \"workerHeaderKeySupport\": true,\n    \"workerDiagnoseRoute\": true\n  }\n}\n",
       "stderr": "",
       "parsed": {
-        "159915": {
-          "ok": true,
-          "profile": "宽基ETF模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 53,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
+        "results": {
+          "159915": {
+            "ok": true,
+            "profile": "宽基ETF模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "300124": {
+            "ok": true,
+            "profile": "机器人/高端制造模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "300750": {
+            "ok": true,
+            "profile": "新能源/电动车模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "512000": {
+            "ok": true,
+            "profile": "行业ETF模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "512010": {
+            "ok": true,
+            "profile": "行业ETF模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "512480": {
+            "ok": true,
+            "profile": "行业ETF模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "513100": {
+            "ok": true,
+            "profile": "债券/黄金/QDII模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "515790": {
+            "ok": true,
+            "profile": "行业ETF模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "518880": {
+            "ok": true,
+            "profile": "债券/黄金/QDII模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "600030": {
+            "ok": true,
+            "profile": "券商/金融弹性模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "600036": {
+            "ok": true,
+            "profile": "银行/保险模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "600050": {
+            "ok": true,
+            "profile": "公用事业/红利模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "600276": {
+            "ok": true,
+            "profile": "医药/生物模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "600519": {
+            "ok": true,
+            "profile": "消费/白酒模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "600845": {
+            "ok": true,
+            "profile": "AI/软件模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "600900": {
+            "ok": true,
+            "profile": "银行/保险模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "601012": {
+            "ok": true,
+            "profile": "新能源/电动车模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "601088": {
+            "ok": true,
+            "profile": "银行/保险模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "601318": {
+            "ok": true,
+            "profile": "银行/保险模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "601398": {
+            "ok": true,
+            "profile": "银行/保险模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "等待回踩确认"
+          },
+          "603259": {
+            "ok": true,
+            "profile": "医药/生物模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "688185": {
+            "ok": true,
+            "profile": "医药/生物模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "002230": {
+            "ok": true,
+            "profile": "AI/软件模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "002594": {
+            "ok": true,
+            "profile": "新能源/电动车模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "002415": {
+            "ok": true,
+            "profile": "AI/软件模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "DEMO_CYCLE": {
+            "ok": true,
+            "profile": "通用稳健模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          }
         },
-        "300124": {
-          "ok": true,
-          "profile": "机器人/高端制造模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 69,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "300750": {
-          "ok": true,
-          "profile": "新能源/电动车模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 38,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "512000": {
-          "ok": true,
-          "profile": "行业ETF模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 61,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "512010": {
-          "ok": true,
-          "profile": "行业ETF模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 41,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "512480": {
-          "ok": true,
-          "profile": "行业ETF模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 42,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "513100": {
-          "ok": true,
-          "profile": "债券/黄金/QDII模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 47,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "515790": {
-          "ok": true,
-          "profile": "行业ETF模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 49,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "518880": {
-          "ok": true,
-          "profile": "债券/黄金/QDII模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 50,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "600030": {
-          "ok": true,
-          "profile": "券商/金融弹性模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 59,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "600036": {
-          "ok": true,
-          "profile": "银行/保险模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 56,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "600050": {
-          "ok": true,
-          "profile": "公用事业/红利模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 29,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "600276": {
-          "ok": true,
-          "profile": "医药/生物模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 26,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "600519": {
-          "ok": true,
-          "profile": "消费/白酒模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 72,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "600845": {
-          "ok": true,
-          "profile": "AI/软件模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 72,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "600900": {
-          "ok": true,
-          "profile": "银行/保险模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 70,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "601012": {
-          "ok": true,
-          "profile": "新能源/电动车模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 69,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "601088": {
-          "ok": true,
-          "profile": "银行/保险模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 67,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "601318": {
-          "ok": true,
-          "profile": "银行/保险模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 75,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "601398": {
-          "ok": true,
-          "profile": "银行/保险模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 76,
-          "action": "等待回踩确认",
-          "highConfidenceBlockedForDemo": true
-        },
-        "603259": {
-          "ok": true,
-          "profile": "医药/生物模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 27,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "688185": {
-          "ok": true,
-          "profile": "医药/生物模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 58,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "002230": {
-          "ok": true,
-          "profile": "AI/软件模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 59,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "002594": {
-          "ok": true,
-          "profile": "新能源/电动车模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 36,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "002415": {
-          "ok": true,
-          "profile": "AI/软件模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 64,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "DEMO_CYCLE": {
-          "ok": true,
-          "profile": "通用稳健模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "unknown",
-          "productionReady": false,
-          "score": 49,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
+        "prodAssetProductionReady": true,
+        "staticChecks": {
+          "appUsesWebWorker": true,
+          "appRendersProductionBanner": true,
+          "appRendersModelProfile": true,
+          "appForwardsFrontendKeys": true,
+          "indexVersion": true,
+          "swUniqueDecisionWorker": true,
+          "workerHeaderKeySupport": true,
+          "workerDiagnoseRoute": true
         }
       }
     },
     {
-      "name": "model-run-2",
+      "name": "full-review-run-2",
       "exitCode": 0,
-      "stdout": "{\n  \"159915\": {\n    \"ok\": true,\n    \"profile\": \"宽基ETF模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 53,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"300124\": {\n    \"ok\": true,\n    \"profile\": \"机器人/高端制造模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 69,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"300750\": {\n    \"ok\": true,\n    \"profile\": \"新能源/电动车模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 38,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"512000\": {\n    \"ok\": true,\n    \"profile\": \"行业ETF模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 61,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"512010\": {\n    \"ok\": true,\n    \"profile\": \"行业ETF模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 41,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"512480\": {\n    \"ok\": true,\n    \"profile\": \"行业ETF模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 42,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"513100\": {\n    \"ok\": true,\n    \"profile\": \"债券/黄金/QDII模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 47,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"515790\": {\n    \"ok\": true,\n    \"profile\": \"行业ETF模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 49,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"518880\": {\n    \"ok\": true,\n    \"profile\": \"债券/黄金/QDII模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 50,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"600030\": {\n    \"ok\": true,\n    \"profile\": \"券商/金融弹性模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 59,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"600036\": {\n    \"ok\": true,\n    \"profile\": \"银行/保险模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 56,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"600050\": {\n    \"ok\": true,\n    \"profile\": \"公用事业/红利模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 29,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"600276\": {\n    \"ok\": true,\n    \"profile\": \"医药/生物模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 26,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"600519\": {\n    \"ok\": true,\n    \"profile\": \"消费/白酒模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 72,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"600845\": {\n    \"ok\": true,\n    \"profile\": \"AI/软件模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 72,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"600900\": {\n    \"ok\": true,\n    \"profile\": \"银行/保险模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 70,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"601012\": {\n    \"ok\": true,\n    \"profile\": \"新能源/电动车模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 69,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"601088\": {\n    \"ok\": true,\n    \"profile\": \"银行/保险模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 67,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"601318\": {\n    \"ok\": true,\n    \"profile\": \"银行/保险模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 75,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"601398\": {\n    \"ok\": true,\n    \"profile\": \"银行/保险模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 76,\n    \"action\": \"等待回踩确认\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"603259\": {\n    \"ok\": true,\n    \"profile\": \"医药/生物模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 27,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"688185\": {\n    \"ok\": true,\n    \"profile\": \"医药/生物模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 58,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"002230\": {\n    \"ok\": true,\n    \"profile\": \"AI/软件模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 59,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"002594\": {\n    \"ok\": true,\n    \"profile\": \"新能源/电动车模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 36,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"002415\": {\n    \"ok\": true,\n    \"profile\": \"AI/软件模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 64,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"DEMO_CYCLE\": {\n    \"ok\": true,\n    \"profile\": \"通用稳健模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"unknown\",\n    \"productionReady\": false,\n    \"score\": 49,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  }\n}\n",
+      "stdout": "{\n  \"results\": {\n    \"159915\": {\n      \"ok\": true,\n      \"profile\": \"宽基ETF模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"300124\": {\n      \"ok\": true,\n      \"profile\": \"机器人/高端制造模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"300750\": {\n      \"ok\": true,\n      \"profile\": \"新能源/电动车模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"512000\": {\n      \"ok\": true,\n      \"profile\": \"行业ETF模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"512010\": {\n      \"ok\": true,\n      \"profile\": \"行业ETF模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"512480\": {\n      \"ok\": true,\n      \"profile\": \"行业ETF模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"513100\": {\n      \"ok\": true,\n      \"profile\": \"债券/黄金/QDII模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"515790\": {\n      \"ok\": true,\n      \"profile\": \"行业ETF模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"518880\": {\n      \"ok\": true,\n      \"profile\": \"债券/黄金/QDII模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"600030\": {\n      \"ok\": true,\n      \"profile\": \"券商/金融弹性模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"600036\": {\n      \"ok\": true,\n      \"profile\": \"银行/保险模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"600050\": {\n      \"ok\": true,\n      \"profile\": \"公用事业/红利模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"600276\": {\n      \"ok\": true,\n      \"profile\": \"医药/生物模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"600519\": {\n      \"ok\": true,\n      \"profile\": \"消费/白酒模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"600845\": {\n      \"ok\": true,\n      \"profile\": \"AI/软件模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"600900\": {\n      \"ok\": true,\n      \"profile\": \"银行/保险模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"601012\": {\n      \"ok\": true,\n      \"profile\": \"新能源/电动车模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"601088\": {\n      \"ok\": true,\n      \"profile\": \"银行/保险模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"601318\": {\n      \"ok\": true,\n      \"profile\": \"银行/保险模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"601398\": {\n      \"ok\": true,\n      \"profile\": \"银行/保险模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"等待回踩确认\"\n    },\n    \"603259\": {\n      \"ok\": true,\n      \"profile\": \"医药/生物模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"688185\": {\n      \"ok\": true,\n      \"profile\": \"医药/生物模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"002230\": {\n      \"ok\": true,\n      \"profile\": \"AI/软件模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"002594\": {\n      \"ok\": true,\n      \"profile\": \"新能源/电动车模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"002415\": {\n      \"ok\": true,\n      \"profile\": \"AI/软件模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"DEMO_CYCLE\": {\n      \"ok\": true,\n      \"profile\": \"通用稳健模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    }\n  },\n  \"prodAssetProductionReady\": true,\n  \"staticChecks\": {\n    \"appUsesWebWorker\": true,\n    \"appRendersProductionBanner\": true,\n    \"appRendersModelProfile\": true,\n    \"appForwardsFrontendKeys\": true,\n    \"indexVersion\": true,\n    \"swUniqueDecisionWorker\": true,\n    \"workerHeaderKeySupport\": true,\n    \"workerDiagnoseRoute\": true\n  }\n}\n",
       "stderr": "",
       "parsed": {
-        "159915": {
-          "ok": true,
-          "profile": "宽基ETF模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 53,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
+        "results": {
+          "159915": {
+            "ok": true,
+            "profile": "宽基ETF模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "300124": {
+            "ok": true,
+            "profile": "机器人/高端制造模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "300750": {
+            "ok": true,
+            "profile": "新能源/电动车模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "512000": {
+            "ok": true,
+            "profile": "行业ETF模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "512010": {
+            "ok": true,
+            "profile": "行业ETF模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "512480": {
+            "ok": true,
+            "profile": "行业ETF模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "513100": {
+            "ok": true,
+            "profile": "债券/黄金/QDII模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "515790": {
+            "ok": true,
+            "profile": "行业ETF模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "518880": {
+            "ok": true,
+            "profile": "债券/黄金/QDII模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "600030": {
+            "ok": true,
+            "profile": "券商/金融弹性模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "600036": {
+            "ok": true,
+            "profile": "银行/保险模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "600050": {
+            "ok": true,
+            "profile": "公用事业/红利模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "600276": {
+            "ok": true,
+            "profile": "医药/生物模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "600519": {
+            "ok": true,
+            "profile": "消费/白酒模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "600845": {
+            "ok": true,
+            "profile": "AI/软件模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "600900": {
+            "ok": true,
+            "profile": "银行/保险模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "601012": {
+            "ok": true,
+            "profile": "新能源/电动车模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "601088": {
+            "ok": true,
+            "profile": "银行/保险模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "601318": {
+            "ok": true,
+            "profile": "银行/保险模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "601398": {
+            "ok": true,
+            "profile": "银行/保险模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "等待回踩确认"
+          },
+          "603259": {
+            "ok": true,
+            "profile": "医药/生物模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "688185": {
+            "ok": true,
+            "profile": "医药/生物模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "002230": {
+            "ok": true,
+            "profile": "AI/软件模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "002594": {
+            "ok": true,
+            "profile": "新能源/电动车模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "002415": {
+            "ok": true,
+            "profile": "AI/软件模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "DEMO_CYCLE": {
+            "ok": true,
+            "profile": "通用稳健模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          }
         },
-        "300124": {
-          "ok": true,
-          "profile": "机器人/高端制造模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 69,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "300750": {
-          "ok": true,
-          "profile": "新能源/电动车模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 38,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "512000": {
-          "ok": true,
-          "profile": "行业ETF模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 61,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "512010": {
-          "ok": true,
-          "profile": "行业ETF模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 41,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "512480": {
-          "ok": true,
-          "profile": "行业ETF模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 42,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "513100": {
-          "ok": true,
-          "profile": "债券/黄金/QDII模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 47,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "515790": {
-          "ok": true,
-          "profile": "行业ETF模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 49,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "518880": {
-          "ok": true,
-          "profile": "债券/黄金/QDII模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 50,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "600030": {
-          "ok": true,
-          "profile": "券商/金融弹性模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 59,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "600036": {
-          "ok": true,
-          "profile": "银行/保险模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 56,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "600050": {
-          "ok": true,
-          "profile": "公用事业/红利模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 29,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "600276": {
-          "ok": true,
-          "profile": "医药/生物模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 26,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "600519": {
-          "ok": true,
-          "profile": "消费/白酒模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 72,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "600845": {
-          "ok": true,
-          "profile": "AI/软件模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 72,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "600900": {
-          "ok": true,
-          "profile": "银行/保险模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 70,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "601012": {
-          "ok": true,
-          "profile": "新能源/电动车模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 69,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "601088": {
-          "ok": true,
-          "profile": "银行/保险模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 67,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "601318": {
-          "ok": true,
-          "profile": "银行/保险模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 75,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "601398": {
-          "ok": true,
-          "profile": "银行/保险模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 76,
-          "action": "等待回踩确认",
-          "highConfidenceBlockedForDemo": true
-        },
-        "603259": {
-          "ok": true,
-          "profile": "医药/生物模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 27,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "688185": {
-          "ok": true,
-          "profile": "医药/生物模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 58,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "002230": {
-          "ok": true,
-          "profile": "AI/软件模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 59,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "002594": {
-          "ok": true,
-          "profile": "新能源/电动车模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 36,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "002415": {
-          "ok": true,
-          "profile": "AI/软件模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 64,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "DEMO_CYCLE": {
-          "ok": true,
-          "profile": "通用稳健模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "unknown",
-          "productionReady": false,
-          "score": 49,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
+        "prodAssetProductionReady": true,
+        "staticChecks": {
+          "appUsesWebWorker": true,
+          "appRendersProductionBanner": true,
+          "appRendersModelProfile": true,
+          "appForwardsFrontendKeys": true,
+          "indexVersion": true,
+          "swUniqueDecisionWorker": true,
+          "workerHeaderKeySupport": true,
+          "workerDiagnoseRoute": true
         }
       }
     },
     {
-      "name": "model-run-3",
+      "name": "full-review-run-3",
       "exitCode": 0,
-      "stdout": "{\n  \"159915\": {\n    \"ok\": true,\n    \"profile\": \"宽基ETF模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 53,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"300124\": {\n    \"ok\": true,\n    \"profile\": \"机器人/高端制造模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 69,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"300750\": {\n    \"ok\": true,\n    \"profile\": \"新能源/电动车模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 38,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"512000\": {\n    \"ok\": true,\n    \"profile\": \"行业ETF模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 61,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"512010\": {\n    \"ok\": true,\n    \"profile\": \"行业ETF模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 41,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"512480\": {\n    \"ok\": true,\n    \"profile\": \"行业ETF模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 42,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"513100\": {\n    \"ok\": true,\n    \"profile\": \"债券/黄金/QDII模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 47,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"515790\": {\n    \"ok\": true,\n    \"profile\": \"行业ETF模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 49,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"518880\": {\n    \"ok\": true,\n    \"profile\": \"债券/黄金/QDII模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 50,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"600030\": {\n    \"ok\": true,\n    \"profile\": \"券商/金融弹性模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 59,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"600036\": {\n    \"ok\": true,\n    \"profile\": \"银行/保险模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 56,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"600050\": {\n    \"ok\": true,\n    \"profile\": \"公用事业/红利模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 29,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"600276\": {\n    \"ok\": true,\n    \"profile\": \"医药/生物模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 26,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"600519\": {\n    \"ok\": true,\n    \"profile\": \"消费/白酒模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 72,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"600845\": {\n    \"ok\": true,\n    \"profile\": \"AI/软件模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 72,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"600900\": {\n    \"ok\": true,\n    \"profile\": \"银行/保险模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 70,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"601012\": {\n    \"ok\": true,\n    \"profile\": \"新能源/电动车模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 69,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"601088\": {\n    \"ok\": true,\n    \"profile\": \"银行/保险模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 67,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"601318\": {\n    \"ok\": true,\n    \"profile\": \"银行/保险模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 75,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"601398\": {\n    \"ok\": true,\n    \"profile\": \"银行/保险模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 76,\n    \"action\": \"等待回踩确认\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"603259\": {\n    \"ok\": true,\n    \"profile\": \"医药/生物模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 27,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"688185\": {\n    \"ok\": true,\n    \"profile\": \"医药/生物模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 58,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"002230\": {\n    \"ok\": true,\n    \"profile\": \"AI/软件模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 59,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"002594\": {\n    \"ok\": true,\n    \"profile\": \"新能源/电动车模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 36,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"002415\": {\n    \"ok\": true,\n    \"profile\": \"AI/软件模型\",\n    \"tier\": \"C\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"local-sample\",\n    \"productionReady\": false,\n    \"score\": 64,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  },\n  \"DEMO_CYCLE\": {\n    \"ok\": true,\n    \"profile\": \"通用稳健模型\",\n    \"tier\": \"D\",\n    \"regime\": \"中性市场\",\n    \"provider\": \"unknown\",\n    \"productionReady\": false,\n    \"score\": 49,\n    \"action\": \"回避或仅观察\",\n    \"highConfidenceBlockedForDemo\": true\n  }\n}\n",
+      "stdout": "{\n  \"results\": {\n    \"159915\": {\n      \"ok\": true,\n      \"profile\": \"宽基ETF模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"300124\": {\n      \"ok\": true,\n      \"profile\": \"机器人/高端制造模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"300750\": {\n      \"ok\": true,\n      \"profile\": \"新能源/电动车模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"512000\": {\n      \"ok\": true,\n      \"profile\": \"行业ETF模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"512010\": {\n      \"ok\": true,\n      \"profile\": \"行业ETF模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"512480\": {\n      \"ok\": true,\n      \"profile\": \"行业ETF模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"513100\": {\n      \"ok\": true,\n      \"profile\": \"债券/黄金/QDII模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"515790\": {\n      \"ok\": true,\n      \"profile\": \"行业ETF模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"518880\": {\n      \"ok\": true,\n      \"profile\": \"债券/黄金/QDII模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"600030\": {\n      \"ok\": true,\n      \"profile\": \"券商/金融弹性模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"600036\": {\n      \"ok\": true,\n      \"profile\": \"银行/保险模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"600050\": {\n      \"ok\": true,\n      \"profile\": \"公用事业/红利模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"600276\": {\n      \"ok\": true,\n      \"profile\": \"医药/生物模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"600519\": {\n      \"ok\": true,\n      \"profile\": \"消费/白酒模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"600845\": {\n      \"ok\": true,\n      \"profile\": \"AI/软件模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"600900\": {\n      \"ok\": true,\n      \"profile\": \"银行/保险模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"601012\": {\n      \"ok\": true,\n      \"profile\": \"新能源/电动车模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"601088\": {\n      \"ok\": true,\n      \"profile\": \"银行/保险模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"601318\": {\n      \"ok\": true,\n      \"profile\": \"银行/保险模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"601398\": {\n      \"ok\": true,\n      \"profile\": \"银行/保险模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"等待回踩确认\"\n    },\n    \"603259\": {\n      \"ok\": true,\n      \"profile\": \"医药/生物模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"688185\": {\n      \"ok\": true,\n      \"profile\": \"医药/生物模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"002230\": {\n      \"ok\": true,\n      \"profile\": \"AI/软件模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"002594\": {\n      \"ok\": true,\n      \"profile\": \"新能源/电动车模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"002415\": {\n      \"ok\": true,\n      \"profile\": \"AI/软件模型\",\n      \"tier\": \"C\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    },\n    \"DEMO_CYCLE\": {\n      \"ok\": true,\n      \"profile\": \"通用稳健模型\",\n      \"tier\": \"D\",\n      \"productionReady\": false,\n      \"highConfidenceBlockedForDemo\": true,\n      \"hasSubModels\": true,\n      \"hasReasons\": true,\n      \"action\": \"回避或仅观察\"\n    }\n  },\n  \"prodAssetProductionReady\": true,\n  \"staticChecks\": {\n    \"appUsesWebWorker\": true,\n    \"appRendersProductionBanner\": true,\n    \"appRendersModelProfile\": true,\n    \"appForwardsFrontendKeys\": true,\n    \"indexVersion\": true,\n    \"swUniqueDecisionWorker\": true,\n    \"workerHeaderKeySupport\": true,\n    \"workerDiagnoseRoute\": true\n  }\n}\n",
       "stderr": "",
       "parsed": {
-        "159915": {
-          "ok": true,
-          "profile": "宽基ETF模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 53,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
+        "results": {
+          "159915": {
+            "ok": true,
+            "profile": "宽基ETF模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "300124": {
+            "ok": true,
+            "profile": "机器人/高端制造模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "300750": {
+            "ok": true,
+            "profile": "新能源/电动车模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "512000": {
+            "ok": true,
+            "profile": "行业ETF模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "512010": {
+            "ok": true,
+            "profile": "行业ETF模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "512480": {
+            "ok": true,
+            "profile": "行业ETF模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "513100": {
+            "ok": true,
+            "profile": "债券/黄金/QDII模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "515790": {
+            "ok": true,
+            "profile": "行业ETF模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "518880": {
+            "ok": true,
+            "profile": "债券/黄金/QDII模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "600030": {
+            "ok": true,
+            "profile": "券商/金融弹性模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "600036": {
+            "ok": true,
+            "profile": "银行/保险模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "600050": {
+            "ok": true,
+            "profile": "公用事业/红利模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "600276": {
+            "ok": true,
+            "profile": "医药/生物模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "600519": {
+            "ok": true,
+            "profile": "消费/白酒模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "600845": {
+            "ok": true,
+            "profile": "AI/软件模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "600900": {
+            "ok": true,
+            "profile": "银行/保险模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "601012": {
+            "ok": true,
+            "profile": "新能源/电动车模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "601088": {
+            "ok": true,
+            "profile": "银行/保险模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "601318": {
+            "ok": true,
+            "profile": "银行/保险模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "601398": {
+            "ok": true,
+            "profile": "银行/保险模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "等待回踩确认"
+          },
+          "603259": {
+            "ok": true,
+            "profile": "医药/生物模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "688185": {
+            "ok": true,
+            "profile": "医药/生物模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "002230": {
+            "ok": true,
+            "profile": "AI/软件模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "002594": {
+            "ok": true,
+            "profile": "新能源/电动车模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "002415": {
+            "ok": true,
+            "profile": "AI/软件模型",
+            "tier": "C",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          },
+          "DEMO_CYCLE": {
+            "ok": true,
+            "profile": "通用稳健模型",
+            "tier": "D",
+            "productionReady": false,
+            "highConfidenceBlockedForDemo": true,
+            "hasSubModels": true,
+            "hasReasons": true,
+            "action": "回避或仅观察"
+          }
         },
-        "300124": {
-          "ok": true,
-          "profile": "机器人/高端制造模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 69,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "300750": {
-          "ok": true,
-          "profile": "新能源/电动车模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 38,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "512000": {
-          "ok": true,
-          "profile": "行业ETF模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 61,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "512010": {
-          "ok": true,
-          "profile": "行业ETF模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 41,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "512480": {
-          "ok": true,
-          "profile": "行业ETF模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 42,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "513100": {
-          "ok": true,
-          "profile": "债券/黄金/QDII模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 47,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "515790": {
-          "ok": true,
-          "profile": "行业ETF模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 49,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "518880": {
-          "ok": true,
-          "profile": "债券/黄金/QDII模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 50,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "600030": {
-          "ok": true,
-          "profile": "券商/金融弹性模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 59,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "600036": {
-          "ok": true,
-          "profile": "银行/保险模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 56,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "600050": {
-          "ok": true,
-          "profile": "公用事业/红利模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 29,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "600276": {
-          "ok": true,
-          "profile": "医药/生物模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 26,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "600519": {
-          "ok": true,
-          "profile": "消费/白酒模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 72,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "600845": {
-          "ok": true,
-          "profile": "AI/软件模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 72,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "600900": {
-          "ok": true,
-          "profile": "银行/保险模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 70,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "601012": {
-          "ok": true,
-          "profile": "新能源/电动车模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 69,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "601088": {
-          "ok": true,
-          "profile": "银行/保险模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 67,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "601318": {
-          "ok": true,
-          "profile": "银行/保险模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 75,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "601398": {
-          "ok": true,
-          "profile": "银行/保险模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 76,
-          "action": "等待回踩确认",
-          "highConfidenceBlockedForDemo": true
-        },
-        "603259": {
-          "ok": true,
-          "profile": "医药/生物模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 27,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "688185": {
-          "ok": true,
-          "profile": "医药/生物模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 58,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "002230": {
-          "ok": true,
-          "profile": "AI/软件模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 59,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "002594": {
-          "ok": true,
-          "profile": "新能源/电动车模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 36,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "002415": {
-          "ok": true,
-          "profile": "AI/软件模型",
-          "tier": "C",
-          "regime": "中性市场",
-          "provider": "local-sample",
-          "productionReady": false,
-          "score": 64,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
-        },
-        "DEMO_CYCLE": {
-          "ok": true,
-          "profile": "通用稳健模型",
-          "tier": "D",
-          "regime": "中性市场",
-          "provider": "unknown",
-          "productionReady": false,
-          "score": 49,
-          "action": "回避或仅观察",
-          "highConfidenceBlockedForDemo": true
+        "prodAssetProductionReady": true,
+        "staticChecks": {
+          "appUsesWebWorker": true,
+          "appRendersProductionBanner": true,
+          "appRendersModelProfile": true,
+          "appForwardsFrontendKeys": true,
+          "indexVersion": true,
+          "swUniqueDecisionWorker": true,
+          "workerHeaderKeySupport": true,
+          "workerDiagnoseRoute": true
         }
       }
     },
     {
-      "name": "worker-syntax-check",
+      "name": "app-syntax",
       "exitCode": 0,
       "stdout": "",
       "stderr": ""
     },
     {
-      "name": "worker-diagnose-route",
+      "name": "model-syntax",
       "exitCode": 0,
-      "route_ok": true
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "decision-worker-syntax",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
+    },
+    {
+      "name": "worker-syntax",
+      "exitCode": 0,
+      "stdout": "",
+      "stderr": ""
     }
   ]
 }

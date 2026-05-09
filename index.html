@@ -11,7 +11,7 @@
   <link rel="icon" href="icon-192.png" />
   <link rel="apple-touch-icon" href="icon-192.png" />
   <link rel="stylesheet" href="styles.css" />
-  <title>Finance Pulse V4</title>
+  <title>Finance Pulse V12</title>
 </head>
 <body>
   <main class="app">
@@ -20,7 +20,7 @@
         <div class="logo">FP</div>
         <div>
           <h1>Finance Pulse</h1>
-          <p id="subTitle">V4 高置信决策 · 数据诊断</p>
+          <p id="subTitle">V12 代码审查修复版</p>
         </div>
       </div>
       <button class="refresh" id="refreshBtn" type="button">刷新</button>
@@ -58,7 +58,7 @@
       <section class="hero hero-compact">
         <div class="sentiment">
           <h2>股票 / 基金决策</h2>
-          <p>V10 加入生产自检、真实数据阻断、后端诊断和部署检查。只有 Worker、API Key、真实行情、新闻源、数据质量全部达标时，系统才进入可实际应用模式。</p>
+          <p>V12 修复了版本残留、同步计算卡顿、结果页缺失、生产自检状态、前端 Key 转发和缓存问题。前端输入 Key 仅适合个人测试；正式公开版本仍建议使用 Worker Secrets。</p>
         </div>
       </section>
 
@@ -129,7 +129,7 @@
       <section class="section" id="decisionOutput">
         <section class="ai-card">
           <h3>模型说明</h3>
-          <p>V10 会显示综合分、趋势分、动量分、风险分、置信等级、市场环境、组合模型评分、模型解释、历史胜率、Wilson 置信下界、Profit Factor、最大连续亏损和阻断原因。模型默认宁可错过，也不随意给买入提示。</p>
+          <p>V12 会显示综合分、趋势分、动量分、风险分、置信等级、市场环境、组合模型评分、模型解释、历史胜率、Wilson 置信下界、Profit Factor、最大连续亏损和阻断原因。模型默认宁可错过，也不随意给买入提示。</p>
         </section>
       </section>
     </section>
@@ -229,6 +229,23 @@
       </section>
 
 
+
+      <section class="section settings-card">
+        <div class="section-title">
+          <h3>前端输入 API Key</h3>
+          <span>个人测试</span>
+        </div>
+        <label class="field-label">Tushare Token</label>
+        <input id="tushareKeyInput" class="input" type="password" autocomplete="off" placeholder="输入 Tushare Token，仅保存在本机浏览器" />
+        <label class="field-label">EODHD API Token</label>
+        <input id="eodhdKeyInput" class="input" type="password" autocomplete="off" placeholder="输入 EODHD API Token，仅保存在本机浏览器" />
+        <label class="field-label">Finnhub API Key</label>
+        <input id="finnhubKeyInput" class="input" type="password" autocomplete="off" placeholder="输入 Finnhub API Key，仅保存在本机浏览器" />
+        <button class="secondary-btn" id="saveFrontendKeysBtn" type="button">保存到本机</button>
+        <button class="secondary-btn" id="clearFrontendKeysBtn" type="button">清除本机 Key</button>
+        <p class="help-text">这个模式用于个人测试。Key 会保存在当前浏览器 localStorage，并通过请求 Header 发给你的 Worker。不要把填好 Key 的设备借给别人，也不要在公共电脑上使用。</p>
+      </section>
+
       <section class="section settings-card">
         <div class="section-title">
           <h3>GitHub Pages 数据诊断</h3>
@@ -238,7 +255,7 @@
           <div class="diag-item"><span>market.json</span><b id="diagMarket">未检查</b></div>
           <div class="diag-item"><span>assets.json</span><b id="diagAssets">未检查</b></div>
           <div class="diag-item"><span>Service Worker</span><b id="diagSW">未检查</b></div>
-          <div class="diag-item"><span>缓存版本</span><b id="diagCache">V4</b></div>
+          <div class="diag-item"><span>缓存版本</span><b id="diagCache">V12</b></div>
         </div>
         <button class="secondary-btn" id="runDiagBtn" type="button">检查数据路径</button>
         <button class="secondary-btn" id="clearCacheBtn" type="button">清理本地缓存</button>

@@ -276,3 +276,16 @@ button{cursor:pointer}
 .prod-banner.good{color:var(--green);border-color:rgba(57,217,138,.30);background:rgba(57,217,138,.10)}
 .prod-banner.warn{color:var(--yellow);border-color:rgba(255,209,102,.30);background:rgba(255,209,102,.10)}
 .prod-banner.bad{color:var(--red);border-color:rgba(255,107,107,.30);background:rgba(255,107,107,.10)}
+
+
+/* V11 frontend key mode */
+.key-mode-warning{
+  padding:12px;
+  border-radius:18px;
+  margin:10px 0 12px;
+  color:var(--yellow);
+  background:rgba(255,209,102,.10);
+  border:1px solid rgba(255,209,102,.28);
+  font-size:12px;
+  line-height:1.55;
+}

@@ -1,7 +1,7 @@
 {
-  "name": "Finance Pulse V10",
+  "name": "Finance Pulse V12",
   "short_name": "FinancePulse",
-  "description": "生产自检、真实数据阻断、多行业模型和动态决策 PWA V10",
+  "description": "代码审查修复版、前端 Key 测试、多行业模型和动态决策 PWA V12",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

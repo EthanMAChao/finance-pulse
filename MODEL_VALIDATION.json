@@ -246,5 +246,61 @@
       "model production data quality gate",
       "frontend production self-check panel"
     ]
+  },
+  "_v11": {
+    "version": "V11",
+    "generatedAt": "2026-05-09T06:51:35.255988+00:00",
+    "allTestsPassed": true,
+    "summary": {
+      "modelRuns": 3,
+      "workerSyntaxChecked": true,
+      "workerHeaderKeySupport": true,
+      "frontendKeyInputSupport": true
+    },
+    "improvements": [
+      "frontend API key input fields",
+      "localStorage key storage",
+      "custom header forwarding to Worker",
+      "Worker header key fallback",
+      "CORS custom header support",
+      "cache bypass in frontend header key mode"
+    ]
+  },
+  "_v12": {
+    "version": "V12",
+    "generatedAt": "2026-05-09T06:55:14.461686+00:00",
+    "allTestsPassed": true,
+    "summary": {
+      "version": "V12",
+      "modelSymbols": 26,
+      "modelRuns": 3,
+      "syntaxChecks": [
+        "app.js",
+        "model.js",
+        "decision-worker.js",
+        "api/finance-worker.js"
+      ],
+      "allPassed": true,
+      "staticChecks": {
+        "appUsesWebWorker": true,
+        "appRendersProductionBanner": true,
+        "appRendersModelProfile": true,
+        "appForwardsFrontendKeys": true,
+        "indexVersion": true,
+        "swUniqueDecisionWorker": true,
+        "workerHeaderKeySupport": true,
+        "workerDiagnoseRoute": true
+      },
+      "prodAssetProductionReady": true
+    },
+    "fixes": [
+      "rewrote app.js for consistency",
+      "restored Web Worker async model execution",
+      "restored rich decision rendering",
+      "fixed V4/V11 stale labels",
+      "deduped service worker cache list",
+      "added production-data gating checks",
+      "verified frontend key forwarding and worker header fallback"
+    ]
   }
 }

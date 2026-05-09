@@ -1,4 +1,4 @@
-# Finance Pulse V10
+# Finance Pulse V12
 
 V3 是高置信动态股票/基金决策模型版本。
 
@@ -72,7 +72,7 @@ GitHub Pages 只放前端文件。
 - 交付前运行 Node 测试，并生成 TEST_REPORT.json。
 
 
-## V10 改善点
+## V12 改善点
 
 - 新增全市场代码路由：A股沪市/深市/北交所、A股ETF/基金、美股/ETF、港股格式。
 - 新增 `data/universe.json`，用于维护市场路由和行业关键词。
@@ -83,9 +83,9 @@ GitHub Pages 只放前端文件。
 - 增加多轮测试报告，测试覆盖 20+ 个股票/基金样例。
 
 
-## V10 真实数据源接入
+## V12 真实数据源接入
 
-V10 新增 `api/finance-worker.js`，作为真实后端模板。
+V12 新增 `api/finance-worker.js`，作为真实后端模板。
 
 已接入的后端数据源：
 
@@ -115,12 +115,12 @@ wrangler deploy
 
 ### 重要边界
 
-V10 只是把真实数据源接入代码写好了。只有你配置真实 API Key 并部署 Worker 后，App 才会真正动态读取行情、新闻和情绪。
+V12 只是把真实数据源接入代码写好了。只有你配置真实 API Key 并部署 Worker 后，App 才会真正动态读取行情、新闻和情绪。
 
 
-## V10 生产可用性改造
+## V12 生产可用性改造
 
-V10 的重点不是继续增加模型名，而是把“能否实际应用”做成可检查、可阻断、可部署。
+V12 的重点不是继续增加模型名，而是把“能否实际应用”做成可检查、可阻断、可部署。
 
 新增内容：
 
@@ -141,3 +141,34 @@ V10 的重点不是继续增加模型名，而是把“能否实际应用”做�
 3. 在设置页填写 Worker 的 `/market` 和 `/asset?symbol={symbol}`。
 4. 运行生产自检。
 5. A股和美股样例都通过后，再看模型输出。
+
+
+## V12 前端输入 Key 测试模式
+
+V12 支持在 App 设置页直接输入：
+
+- Tushare Token
+- EODHD API Token
+- Finnhub API Key
+
+这些 Key 会保存在当前浏览器的 localStorage，并通过请求 Header 发送给 Worker：
+
+- `X-Tushare-Token`
+- `X-EODHD-Token`
+- `X-Finnhub-Key`
+
+Worker 会优先使用 Worker Secrets；如果 Secrets 没有配置，则读取 Header 里的 Key。
+
+### 安全提醒
+
+这个模式只适合个人测试，不适合公开产品。正式发布仍建议使用：
+
+```bash
+npx wrangler secret put TUSHARE_TOKEN
+npx wrangler secret put EODHD_API_TOKEN
+npx wrangler secret put FINNHUB_API_KEY
+```
+
+### 前端 Key 模式下的缓存
+
+V12 在 Header Key 模式下会跳过 Worker Cache，避免不同用户的 Key 请求结果被缓存混用。

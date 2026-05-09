@@ -100,7 +100,7 @@ https://your-api.com/asset/{symbol}
 如果缺少 sector / industry，前端会退回到 symbol 和 name 的关键词匹配。
 
 
-## V10 全市场路由
+## V12 全市场路由
 
 前端识别规则：
 
@@ -114,7 +114,7 @@ https://your-api.com/asset/{symbol}
 真实生产版本仍应以后端证券主数据为准。
 
 
-## V10 Worker 返回结构
+## V12 Worker 返回结构
 
 `GET /asset?symbol=600845` 返回：
 
@@ -146,7 +146,7 @@ https://your-api.com/asset/{symbol}
 ```
 
 
-## V10 生产自检接口
+## V12 生产自检接口
 
 `GET /diagnose?symbol=600845`
 
@@ -164,3 +164,21 @@ https://your-api.com/asset/{symbol}
 ```
 
 如果 `productionReady` 为 false，前端模型会阻断高置信实盘建议。
+
+
+## V12 Header Key 模式
+
+前端请求 Worker 时可以携带：
+
+```text
+X-Tushare-Token: your-token
+X-EODHD-Token: your-token
+X-Finnhub-Key: your-key
+```
+
+Worker 使用优先级：
+
+1. Worker Secrets
+2. Header Key
+3. 无 Key 时降级 / 报错 / 使用 demo provider
+```
