@@ -1,0 +1,3 @@
+name = "finance-pulse-api"
+main = "finance-worker.js"
+compatibility_date = "2026-05-09"
