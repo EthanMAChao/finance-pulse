@@ -1,1 +1,25 @@
-{"name":"Finance Pulse","short_name":"FinancePulse","description":"每日金融情报 AI Dashboard","start_url":"./index.html","display":"standalone","background_color":"#050816","theme_color":"#050816","orientation":"portrait","icons":[{"src":"icon-192.png","sizes":"192x192","type":"image/png","purpose":"any maskable"},{"src":"icon-512.png","sizes":"512x512","type":"image/png","purpose":"any maskable"}]}
+{
+  "name": "Finance Pulse Model V2",
+  "short_name": "FinancePulse",
+  "description": "高置信动态股票基金决策模型 PWA",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#050816",
+  "theme_color": "#050816",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}

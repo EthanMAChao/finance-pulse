@@ -1,0 +1,106 @@
+{
+  "DEMO_AI": {
+    "decisionScore": 50,
+    "trendScore": 50,
+    "momentumScore": 48,
+    "riskScore": 51,
+    "rsi14": 42.4,
+    "currentStrictSignal": false,
+    "backtest20d": {
+      "signals": 0,
+      "wins": 0,
+      "winRate": 0,
+      "avgForwardReturn": 0
+    },
+    "backtest40d": {
+      "signals": 0,
+      "wins": 0,
+      "winRate": 0,
+      "avgForwardReturn": 0
+    },
+    "backtest60d": {
+      "signals": 0,
+      "wins": 0,
+      "winRate": 0,
+      "avgForwardReturn": 0
+    }
+  },
+  "DEMO_DEF": {
+    "decisionScore": 78,
+    "trendScore": 85,
+    "momentumScore": 64,
+    "riskScore": 82,
+    "rsi14": 58.4,
+    "currentStrictSignal": false,
+    "backtest20d": {
+      "signals": 0,
+      "wins": 0,
+      "winRate": 0,
+      "avgForwardReturn": 0
+    },
+    "backtest40d": {
+      "signals": 0,
+      "wins": 0,
+      "winRate": 0,
+      "avgForwardReturn": 0
+    },
+    "backtest60d": {
+      "signals": 0,
+      "wins": 0,
+      "winRate": 0,
+      "avgForwardReturn": 0
+    }
+  },
+  "DEMO_CYCLE": {
+    "decisionScore": 41,
+    "trendScore": 15,
+    "momentumScore": 43,
+    "riskScore": 51,
+    "rsi14": 52.0,
+    "currentStrictSignal": false,
+    "backtest20d": {
+      "signals": 0,
+      "wins": 0,
+      "winRate": 0,
+      "avgForwardReturn": 0
+    },
+    "backtest40d": {
+      "signals": 0,
+      "wins": 0,
+      "winRate": 0,
+      "avgForwardReturn": 0
+    },
+    "backtest60d": {
+      "signals": 0,
+      "wins": 0,
+      "winRate": 0,
+      "avgForwardReturn": 0
+    }
+  },
+  "DEMO_WEAK": {
+    "decisionScore": 18,
+    "trendScore": 15,
+    "momentumScore": 15,
+    "riskScore": 19,
+    "rsi14": 19.2,
+    "currentStrictSignal": false,
+    "backtest20d": {
+      "signals": 0,
+      "wins": 0,
+      "winRate": 0,
+      "avgForwardReturn": 0
+    },
+    "backtest40d": {
+      "signals": 0,
+      "wins": 0,
+      "winRate": 0,
+      "avgForwardReturn": 0
+    },
+    "backtest60d": {
+      "signals": 0,
+      "wins": 0,
+      "winRate": 0,
+      "avgForwardReturn": 0
+    }
+  }
+}
