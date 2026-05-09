@@ -1,3 +1,7 @@
 name = "finance-pulse-api"
 main = "finance-worker.js"
 compatibility_date = "2026-05-09"
+
+[vars]
+# Non-secret config can go here.
+PROVIDER_MODE = "production"

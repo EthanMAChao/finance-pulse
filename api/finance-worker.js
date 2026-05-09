@@ -1,16 +1,25 @@
-// Finance Pulse V8 Cloudflare Worker
-// Routes:
-//   /health
-//   /market
-//   /asset?symbol=600845
+// Finance Pulse V10 Cloudflare Worker
 //
-// This template uses public Yahoo Finance chart endpoints and Google News RSS as a demo provider.
-// For production, replace upstreams with licensed market-data/news providers.
+// Routes:
+//   GET /health
+//   GET /market
+//   GET /asset?symbol=600845
+//   GET /news?symbol=AAPL
+//
+// Required secrets / env vars:
+//   TUSHARE_TOKEN      optional, for A股/基金历史行情 and basic metadata
+//   EODHD_API_TOKEN    optional, for US/HK/global EOD historical data
+//   FINNHUB_API_KEY    optional, for news/company news
+//
+// Recommended deployment:
+//   wrangler secret put TUSHARE_TOKEN
+//   wrangler secret put EODHD_API_TOKEN
+//   wrangler secret put FINNHUB_API_KEY
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type"
+  "Access-Control-Allow-Headers": "Content-Type, Authorization"
 };
 
 function json(data, status = 200) {
@@ -20,32 +29,183 @@ function json(data, status = 200) {
   });
 }
 
-function normalizeSymbol(input) {
-  const raw = String(input || "").trim().toUpperCase();
-  if (!raw) return "";
-  if (raw.includes(".")) return raw;
-  if (/^(159|002|000|300|301|399)\d{3}$/.test(raw)) return raw + ".SZ";
-  if (/^(5|6|9)\d{5}$/.test(raw)) return raw + ".SS";
-  return raw;
+function ymd(d) {
+  const dt = d instanceof Date ? d : new Date(d);
+  const y = dt.getUTCFullYear();
+  const m = String(dt.getUTCMonth() + 1).padStart(2, "0");
+  const day = String(dt.getUTCDate()).padStart(2, "0");
+  return `${y}${m}${day}`;
 }
 
-function inferIndustry(symbol, name = "") {
-  const text = `${symbol} ${name}`.toLowerCase();
-  if (/chip|semi|hbm|memory|storage|芯片|半导体|存储/.test(text)) return "半导体/存储";
-  if (/ai|soft|cloud|data|软件|云|算力|数据/.test(text)) return "AI/软件";
-  if (/bank|证券|银行|保险|券商/.test(text)) return "金融";
-  if (/etf|fund|指数|基金/.test(text)) return "基金/ETF";
+function iso(d) {
+  if (!d) return "";
+  const s = String(d);
+  if (/^\d{8}$/.test(s)) return `${s.slice(0,4)}-${s.slice(4,6)}-${s.slice(6,8)}`;
+  return new Date(s).toISOString().slice(0, 10);
+}
+
+function round(v) {
+  return Number.isFinite(Number(v)) ? Math.round(Number(v) * 100) / 100 : null;
+}
+
+function classifySymbol(raw) {
+  const s = String(raw || "").trim().toUpperCase();
+  if (!s) return { raw: s, market: "UNKNOWN", type: "unknown", providerSymbol: "" };
+
+  if (/^\d{6}$/.test(s)) {
+    if (/^(15|16)\d{4}$/.test(s)) return { raw: s, market: "CN", type: "fund", exchange: "SZ", tsCode: `${s}.SZ`, yahoo: `${s}.SZ` };
+    if (/^(50|51|52|56|58)\d{4}$/.test(s)) return { raw: s, market: "CN", type: "fund", exchange: "SH", tsCode: `${s}.SH`, yahoo: `${s}.SS` };
+    if (/^(600|601|603|605|688)\d{3}$/.test(s)) return { raw: s, market: "CN", type: "stock", exchange: "SH", tsCode: `${s}.SH`, yahoo: `${s}.SS` };
+    if (/^(000|001|002|003|300|301)\d{3}$/.test(s)) return { raw: s, market: "CN", type: "stock", exchange: "SZ", tsCode: `${s}.SZ`, yahoo: `${s}.SZ` };
+    if (/^(430|830|831|832|833|834|835|836|837|838|839|870|871|872|873|920)\d{3}$/.test(s)) return { raw: s, market: "CN", type: "stock", exchange: "BJ", tsCode: `${s}.BJ`, yahoo: `${s}.BJ` };
+  }
+
+  if (/^\d{4,5}\.HK$/.test(s)) return { raw: s, market: "HK", type: "stock", exchange: "HK", yahoo: s.padStart(7, "0") };
+  if (/^[A-Z]{1,5}(\.[A-Z])?$/.test(s)) {
+    const commonEtfs = new Set(["SPY","QQQ","DIA","IWM","VTI","VOO","IVV","XLK","XLF","XLE","SMH","SOXX","ARKK","TLT","GLD","SLV","HYG","LQD"]);
+    return { raw: s, market: "US", type: commonEtfs.has(s) ? "fund" : "stock", exchange: "US", yahoo: s };
+  }
+  return { raw: s, market: "UNKNOWN", type: "unknown", yahoo: s };
+}
+
+function inferIndustry(symbol, name = "", type = "") {
+  const text = `${symbol} ${name} ${type}`.toLowerCase();
+  const cn = `${name} ${type}`;
+  if (/etf|fund|lof|指数|基金/i.test(text + cn)) return "基金/ETF";
+  if (/semiconductor|chip|memory|hbm|storage|半导体|芯片|存储|集成电路/i.test(text + cn)) return "半导体/存储";
+  if (/software|cloud|ai|data|internet|人工智能|软件|云|算力|数据|信息技术|计算机/i.test(text + cn)) return "AI/软件";
+  if (/pharma|biotech|medical|health|医药|医疗|生物|疫苗|创新药/i.test(text + cn)) return "医药/生物";
+  if (/bank|insurance|broker|银行|保险|券商|证券/i.test(text + cn)) return "金融";
+  if (/consumer|liquor|food|白酒|食品|饮料|消费/i.test(text + cn)) return "消费";
+  if (/battery|ev|solar|新能源|电池|锂电|光伏|储能|汽车/i.test(text + cn)) return "新能源";
+  if (/energy|coal|oil|gas|material|煤炭|石油|有色|钢铁|化工|资源/i.test(text + cn)) return "资源/能源/材料";
   return "行业未知";
 }
 
-async function fetchChart(symbol, range = "3y") {
-  const yf = normalizeSymbol(symbol);
-  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(yf)}?range=${range}&interval=1d&events=history`;
+async function tushare(env, apiName, params = {}, fields = "") {
+  if (!env.TUSHARE_TOKEN) throw new Error("TUSHARE_TOKEN not configured");
+  const res = await fetch("https://api.tushare.pro", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      api_name: apiName,
+      token: env.TUSHARE_TOKEN,
+      params,
+      fields
+    })
+  });
+  if (!res.ok) throw new Error(`Tushare HTTP ${res.status}`);
+  const data = await res.json();
+  if (data.code !== 0) throw new Error(`Tushare ${data.code}: ${data.msg || "error"}`);
+  const fieldsArr = data.data.fields || [];
+  const rows = data.data.items || [];
+  return rows.map(row => Object.fromEntries(fieldsArr.map((f, i) => [f, row[i]])));
+}
+
+async function getTushareAsset(info, env) {
+  const end = ymd(new Date());
+  const startDate = new Date(Date.now() - 365 * 4 * 24 * 3600 * 1000);
+  const start = ymd(startDate);
+
+  let name = info.raw;
+  let industry = "行业未知";
+  let prices = [];
+
+  if (info.type === "stock") {
+    try {
+      const basic = await tushare(env, "stock_basic", { ts_code: info.tsCode }, "ts_code,symbol,name,area,industry,market,list_date");
+      if (basic[0]) {
+        name = basic[0].name || name;
+        industry = basic[0].industry || industry;
+      }
+    } catch {}
+
+    const rows = await tushare(
+      env,
+      "daily",
+      { ts_code: info.tsCode, start_date: start, end_date: end },
+      "ts_code,trade_date,open,high,low,close,vol"
+    );
+    prices = rows.reverse().map(r => ({
+      date: iso(r.trade_date),
+      open: round(r.open),
+      high: round(r.high),
+      low: round(r.low),
+      close: round(r.close),
+      volume: Math.round(Number(r.vol || 0) * 100)
+    }));
+  } else {
+    try {
+      const basic = await tushare(env, "fund_basic", { ts_code: info.tsCode }, "ts_code,name,management,custodian,fund_type,found_date,due_date,list_date");
+      if (basic[0]) {
+        name = basic[0].name || name;
+        industry = basic[0].fund_type || "基金/ETF";
+      }
+    } catch {}
+
+    let rows = [];
+    try {
+      rows = await tushare(
+        env,
+        "fund_daily",
+        { ts_code: info.tsCode, start_date: start, end_date: end },
+        "ts_code,trade_date,open,high,low,close,vol"
+      );
+    } catch {
+      rows = await tushare(
+        env,
+        "fund_nav",
+        { ts_code: info.tsCode, start_date: start, end_date: end },
+        "ts_code,end_date,unit_nav,accum_nav"
+      );
+    }
+
+    prices = rows.reverse().map(r => {
+      const close = r.close ?? r.unit_nav ?? r.accum_nav;
+      return {
+        date: iso(r.trade_date || r.end_date),
+        open: round(r.open ?? close),
+        high: round(r.high ?? close),
+        low: round(r.low ?? close),
+        close: round(close),
+        volume: Math.round(Number(r.vol || 0) * 100)
+      };
+    });
+  }
+
+  return { name, industry, prices, provider: "tushare" };
+}
+
+async function getEodhdAsset(info, env) {
+  if (!env.EODHD_API_TOKEN) throw new Error("EODHD_API_TOKEN not configured");
+  let symbol = info.yahoo || info.raw;
+  if (info.market === "CN" && info.exchange === "SH") symbol = `${info.raw}.SHG`;
+  if (info.market === "CN" && info.exchange === "SZ") symbol = `${info.raw}.SHE`;
+  const from = new Date(Date.now() - 365 * 4 * 24 * 3600 * 1000).toISOString().slice(0,10);
+  const url = `https://eodhd.com/api/eod/${encodeURIComponent(symbol)}?api_token=${env.EODHD_API_TOKEN}&fmt=json&period=d&from=${from}`;
+  const res = await fetch(url);
+  if (!res.ok) throw new Error(`EODHD HTTP ${res.status}`);
+  const rows = await res.json();
+  if (!Array.isArray(rows) || !rows.length) throw new Error("EODHD empty result");
+  const prices = rows.map(r => ({
+    date: r.date,
+    open: round(r.open),
+    high: round(r.high),
+    low: round(r.low),
+    close: round(r.adjusted_close ?? r.close),
+    volume: Math.round(Number(r.volume || 0))
+  })).filter(p => p.close);
+  return { name: info.raw, industry: inferIndustry(info.raw, info.raw, info.type), prices, provider: "eodhd" };
+}
+
+async function getYahooAsset(info) {
+  const symbol = info.yahoo || info.raw;
+  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(symbol)}?range=3y&interval=1d&events=history`;
   const res = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0" } });
-  if (!res.ok) throw new Error(`Yahoo chart HTTP ${res.status}`);
+  if (!res.ok) throw new Error(`Yahoo HTTP ${res.status}`);
   const data = await res.json();
   const result = data.chart && data.chart.result && data.chart.result[0];
-  if (!result) throw new Error("No chart result");
+  if (!result) throw new Error("Yahoo empty result");
   const q = result.indicators.quote[0];
   const timestamps = result.timestamp || [];
   const prices = timestamps.map((ts, i) => {
@@ -60,14 +220,39 @@ async function fetchChart(symbol, range = "3y") {
       volume: Math.round((q.volume && q.volume[i]) || 0)
     };
   }).filter(Boolean);
-  return { meta: result.meta || {}, prices, yahooSymbol: yf };
+  const meta = result.meta || {};
+  return {
+    name: meta.shortName || meta.longName || info.raw,
+    industry: inferIndustry(info.raw, meta.shortName || meta.longName || "", info.type),
+    prices,
+    provider: "yahoo-demo"
+  };
 }
 
-function round(v) {
-  return Number.isFinite(Number(v)) ? Math.round(Number(v) * 100) / 100 : null;
+async function getFinnhubNews(symbol, name, env) {
+  if (!env.FINNHUB_API_KEY) return [];
+  const to = new Date();
+  const from = new Date(Date.now() - 30 * 24 * 3600 * 1000);
+  const s = encodeURIComponent(symbol);
+  const url = `https://finnhub.io/api/v1/company-news?symbol=${s}&from=${from.toISOString().slice(0,10)}&to=${to.toISOString().slice(0,10)}&token=${env.FINNHUB_API_KEY}`;
+  try {
+    const res = await fetch(url);
+    if (!res.ok) return [];
+    const rows = await res.json();
+    if (!Array.isArray(rows)) return [];
+    return rows.slice(0, 8).map(n => ({
+      title: n.headline || "",
+      summary: n.summary || "",
+      source: n.source || "Finnhub",
+      publishedAt: n.datetime ? new Date(n.datetime * 1000).toISOString().slice(0,10) : ""
+    }));
+  } catch {
+    return [];
+  }
 }
 
-function simpleSentiment(news) {
+function sentimentScore(news) {
+  if (!Array.isArray(news) || !news.length) return 50;
   const pos = /增长|突破|上调|买入|强劲|创新高|盈利|超预期|合作|订单|利好|beat|upgrade|growth|record|profit|strong|rally/i;
   const neg = /下滑|风险|调查|处罚|亏损|低于预期|减持|暴跌|违约|裁员|利空|miss|downgrade|loss|risk|probe|weak|drop/i;
   let score = 50;
@@ -79,37 +264,125 @@ function simpleSentiment(news) {
   return Math.max(0, Math.min(100, score));
 }
 
-async function fetchNews(symbol, name) {
-  const q = encodeURIComponent(`${symbol} ${name || ""} 股票 OR stock`);
-  const url = `https://news.google.com/rss/search?q=${q}&hl=zh-CN&gl=CN&ceid=CN:zh-Hans`;
-  try {
-    const res = await fetch(url, { headers: { "User-Agent": "Mozilla/5.0" } });
-    if (!res.ok) return [];
-    const xml = await res.text();
-    const items = [...xml.matchAll(/<item>([\s\S]*?)<\/item>/g)].slice(0, 8);
-    return items.map(m => {
-      const block = m[1];
-      return {
-        title: decodeXml((block.match(/<title><!\[CDATA\[(.*?)\]\]><\/title>/) || block.match(/<title>(.*?)<\/title>/) || [,""])[1]),
-        source: "Google News",
-        publishedAt: decodeXml((block.match(/<pubDate>(.*?)<\/pubDate>/) || [,""])[1])
-      };
-    });
-  } catch {
-    return [];
+function marketModelFromIndices(indices) {
+  let vals = [];
+  for (const x of indices || []) {
+    const m = String(x.value || "").match(/[-+]?\d+(\.\d+)?/);
+    if (m) vals.push(Number(m[0]));
   }
+  const avg = vals.length ? vals.reduce((a,b)=>a+b,0)/vals.length : 0;
+  return {
+    riskScore: Math.max(20, Math.min(90, 55 + avg * 5)),
+    breadthScore: Math.max(20, Math.min(90, 55 + avg * 4)),
+    trendScore: Math.max(20, Math.min(90, 55 + avg * 4)),
+    sentimentScore: Math.max(20, Math.min(90, 55 + avg * 3))
+  };
 }
 
-function decodeXml(s) {
-  return String(s || "")
-    .replaceAll("&amp;", "&")
-    .replaceAll("&lt;", "<")
-    .replaceAll("&gt;", ">")
-    .replaceAll("&quot;", '"')
-    .replaceAll("&#39;", "'");
+
+function dataQualityReport(asset) {
+  const prices = asset.prices || [];
+  const issues = [];
+  if (prices.length < 500) issues.push("history_less_than_500_days");
+  let bad = 0, zeroVolume = 0, gaps = 0;
+  for (let i = 0; i < prices.length; i++) {
+    const p = prices[i];
+    if (!(Number(p.close) > 0) || !(Number(p.high) >= Number(p.low))) bad++;
+    if (Number(p.volume || 0) === 0) zeroVolume++;
+    if (i > 0) {
+      const d1 = new Date(prices[i - 1].date);
+      const d2 = new Date(p.date);
+      const gap = (d2 - d1) / (24 * 3600 * 1000);
+      if (gap > 10) gaps++;
+    }
+  }
+  if (bad > 0) issues.push("bad_price_rows:" + bad);
+  if (zeroVolume > prices.length * 0.2) issues.push("too_many_zero_volume_rows");
+  if (gaps > 5) issues.push("too_many_date_gaps:" + gaps);
+  const provider = String(asset.provider || "").toLowerCase();
+  if (/yahoo-demo|demo|local|sample|synthetic/.test(provider)) issues.push("demo_provider_not_for_production");
+  return {
+    ok: issues.length === 0,
+    productionReady: issues.length === 0,
+    issues,
+    rows: prices.length,
+    provider: asset.provider || "unknown"
+  };
 }
 
-async function handleMarket() {
+async function withCache(request, ttlSeconds, producer) {
+  const cache = caches.default;
+  const cacheKey = new Request(request.url, request);
+  const cached = await cache.match(cacheKey);
+  if (cached) {
+    const data = await cached.json();
+    data.cache = { hit: true, ttlSeconds };
+    return json(data);
+  }
+  const response = await producer();
+  try {
+    const clone = response.clone();
+    const headers = new Headers(clone.headers);
+    headers.set("Cache-Control", `public, max-age=${ttlSeconds}`);
+    const cachedResponse = new Response(await clone.text(), { status: clone.status, headers });
+    await cache.put(cacheKey, cachedResponse);
+  } catch {}
+  return response;
+}
+
+async function handleAsset(request, env) {
+  const url = new URL(request.url);
+  const symbol = url.searchParams.get("symbol") || "";
+  const info = classifySymbol(symbol);
+  if (!info.raw) return json({ error: "Missing symbol" }, 400);
+
+  let assetData;
+  let providerErrors = [];
+
+  if (info.market === "CN" && env.TUSHARE_TOKEN) {
+    try { assetData = await getTushareAsset(info, env); }
+    catch (e) { providerErrors.push(`tushare: ${e.message}`); }
+  }
+
+  if (!assetData && env.EODHD_API_TOKEN) {
+    try { assetData = await getEodhdAsset(info, env); }
+    catch (e) { providerErrors.push(`eodhd: ${e.message}`); }
+  }
+
+  if (!assetData) {
+    try { assetData = await getYahooAsset(info); }
+    catch (e) { providerErrors.push(`yahoo-demo: ${e.message}`); }
+  }
+
+  if (!assetData || !assetData.prices || assetData.prices.length < 60) {
+    return json({ error: "No usable price data", providerErrors }, 502);
+  }
+
+  const news = await getFinnhubNews(info.raw, assetData.name, env);
+  const industry = assetData.industry || inferIndustry(info.raw, assetData.name, info.type);
+  const payload = {
+    asset: {
+      symbol: info.raw,
+      providerSymbol: info.tsCode || info.yahoo || info.raw,
+      provider: assetData.provider,
+      providerErrors,
+      market: info.market,
+      exchange: info.exchange,
+      name: assetData.name || info.raw,
+      assetType: info.type === "fund" ? "fund" : "stock",
+      sector: industry,
+      industry,
+      currency: "",
+      news,
+      sentimentScore: sentimentScore(news),
+      prices: assetData.prices
+    }
+  };
+  payload.asset.quality = dataQualityReport(payload.asset);
+  return json(payload);
+}
+
+async function handleMarket(env) {
   const symbols = [
     ["^IXIC", "纳斯达克"],
     ["000001.SS", "上证指数"],
@@ -118,7 +391,8 @@ async function handleMarket() {
   const indices = [];
   for (const [symbol, name] of symbols) {
     try {
-      const { prices } = await fetchChart(symbol, "5d");
+      const result = await getYahooAsset({ raw: symbol, yahoo: symbol, type: "index" });
+      const prices = result.prices;
       const last = prices[prices.length - 1]?.close;
       const prev = prices[prices.length - 2]?.close;
       const change = prev ? ((last / prev - 1) * 100) : 0;
@@ -127,85 +401,110 @@ async function handleMarket() {
       indices.push({ name, value: "N/A" });
     }
   }
+  const modelMarket = marketModelFromIndices(indices);
   return json({
     updatedAt: new Date().toISOString(),
-    subtitle: "V8 全市场路由 · 已测试",
+    subtitle: "V10 生产自检 · 可部署版",
     market: {
-      mode: "动态刷新",
-      summary: "市场数据来自 Worker 后端实时抓取。主题热度应替换为你的正式行情/行业资金流数据源。"
+      mode: "动态后端",
+      summary: "后端会优先使用 Tushare/EODHD/Finnhub。未配置对应 Key 时，会降级到演示行情源或返回明确错误。"
     },
     decision: {
-      score: 80,
-      conclusion: "当前已连接动态后端。个股/基金决策会结合历史行情、行业模型、新闻情绪和风控回测。"
+      score: Math.round((modelMarket.riskScore + modelMarket.trendScore + modelMarket.sentimentScore) / 3),
+      conclusion: "市场数据来自 Worker 后端。真实可用性取决于你配置的数据源 Key 和订阅权限。"
     },
     indices,
+    modelMarket,
     homeSignals: [
-      { icon: "🔄", title: "动态刷新", text: "刷新按钮会重新请求 Worker 后端，不再只读静态 JSON。" },
-      { icon: "🧠", title: "行业模型", text: "输入标的后根据行业、名称和资产类型自动匹配模型。" }
+      { icon: "🔌", title: "真实数据源", text: "Tushare/EODHD/Finnhub 已接入 Worker 模板。" },
+      { icon: "🛡️", title: "后端保护", text: "API Key 保存在 Worker Secrets，不暴露到 GitHub Pages 前端。" }
     ],
     tracks: [
-      { icon: "💾", name: "存储芯片", logic: "需接入行业资金流后动态评分。", tag: "动态", score: 80, entry: "等确认", risk: "中", rules: [{ text: "建议用正式行业行情源替换示例评分。" }] },
-      { icon: "🧠", name: "AI算力", logic: "需接入成分股热度和新闻情绪。", tag: "动态", score: 78, entry: "等回踩", risk: "中高", rules: [{ text: "观察成交额和龙头持续性。" }] }
+      { icon: "💾", name: "半导体/存储", logic: "动态版本建议接入行业成分股涨跌和成交额后计算。", tag: "动态", score: 78, entry: "看模型", risk: "中", rules: [{ text: "以输入具体股票/ETF后的模型结果为准。" }] },
+      { icon: "🧠", name: "AI/软件", logic: "结合个股趋势、新闻情绪和市场环境过滤。", tag: "动态", score: 76, entry: "看模型", risk: "中", rules: [{ text: "避免只根据热点追高。" }] }
     ],
     hotThemes: [
-      { name: "存储芯片", score: 80 },
-      { name: "AI算力", score: 78 },
+      { name: "AI/软件", score: 76 },
+      { name: "半导体", score: 74 },
       { name: "高股息", score: 70 },
-      { name: "机器人", score: 66 }
+      { name: "新能源", score: 64 }
     ],
     hotNews: [
-      { icon: "📰", title: "实时新闻", text: "Worker 已提供新闻接口模板，可接入正式新闻源。", tag: "动态" },
-      { icon: "💰", title: "资金流", text: "行业资金流需要接入 licensed 数据源。", tag: "待接入" }
+      { icon: "📰", title: "新闻源", text: env.FINNHUB_API_KEY ? "Finnhub 新闻已配置。" : "Finnhub 未配置，新闻情绪会降级。", tag: env.FINNHUB_API_KEY ? "已配置" : "待配置" }
     ],
     radar: {
-      score: 80,
-      discipline: "动态后端只解决数据刷新。最终决策仍必须通过风控、回测和阻断条件。",
+      score: 78,
+      discipline: "动态数据只解决输入质量，真实交易仍需要回测门槛、风险阻断和仓位控制。",
       cards: [
-        { icon: "🔄", title: "行情", text: "后端实时获取OHLC。" },
-        { icon: "📰", title: "新闻", text: "新闻情绪进入模型。" },
-        { icon: "🧭", title: "行业", text: "自动匹配行业模型。" },
+        { icon: "📈", title: "行情", text: "Tushare/EODHD/Yahoo demo。" },
+        { icon: "📰", title: "新闻", text: "Finnhub company news。" },
+        { icon: "🧭", title: "行业", text: "前端模型自动匹配。" },
         { icon: "🛡️", title: "风控", text: "回测不过不出高置信。" }
       ]
     },
     risks: [
-      { title: "数据源风险", level: "高", text: "免费公共接口可能不稳定。生产版本应使用正式授权行情和新闻源。" },
-      { title: "模型风险", level: "高", text: "历史胜率不代表未来胜率。" }
+      { title: "订阅权限风险", level: "高", text: "不同 API 套餐可用市场和历史深度不同。" },
+      { title: "免费源不稳定", level: "高", text: "Yahoo demo 仅作兜底演示，不建议用于生产。" }
     ]
   });
 }
 
-async function handleAsset(url) {
-  const input = url.searchParams.get("symbol") || "";
-  const yf = normalizeSymbol(input);
-  if (!yf) return json({ error: "Missing symbol" }, 400);
-  const { meta, prices, yahooSymbol } = await fetchChart(yf, "3y");
-  const name = meta.shortName || meta.longName || input;
-  const industry = inferIndustry(input, name);
-  const news = await fetchNews(input, name);
+
+async function handleDiagnose(request, env) {
+  const assetResp = await handleAsset(request, env);
+  const data = await assetResp.clone().json();
+  if (!assetResp.ok || data.error) {
+    return json({
+      ok: false,
+      productionReady: false,
+      error: data.error || "asset_fetch_failed",
+      providerErrors: data.providerErrors || []
+    }, assetResp.status);
+  }
+  const report = dataQualityReport(data.asset);
   return json({
-    asset: {
-      symbol: input.toUpperCase(),
-      providerSymbol: yahooSymbol,
-      name,
-      assetType: /ETF|Fund|基金|指数/i.test(name) ? "fund" : "stock",
-      sector: industry,
-      industry,
-      currency: meta.currency || "",
-      news,
-      sentimentScore: simpleSentiment(news),
-      prices
-    }
+    ok: true,
+    symbol: data.asset.symbol,
+    name: data.asset.name,
+    provider: data.asset.provider,
+    market: data.asset.market,
+    industry: data.asset.industry,
+    rows: report.rows,
+    productionReady: report.productionReady,
+    issues: report.issues,
+    providerErrors: data.asset.providerErrors || [],
+    sample: data.asset.prices.slice(-3)
+  });
+}
+
+async function handleHealth(env) {
+  return json({
+    ok: true,
+    mode: "Finance Pulse V10 Worker",
+    now: new Date().toISOString(),
+    providers: {
+      tushare: Boolean(env.TUSHARE_TOKEN),
+      eodhd: Boolean(env.EODHD_API_TOKEN),
+      finnhub: Boolean(env.FINNHUB_API_KEY)
+    },
+    routes: ["/health", "/market", "/asset?symbol=600845", "/diagnose?symbol=600845", "/news?symbol=AAPL"]
   });
 }
 
 export default {
-  async fetch(request) {
-    const url = new URL(request.url);
+  async fetch(request, env) {
     if (request.method === "OPTIONS") return new Response(null, { headers: CORS_HEADERS });
+    const url = new URL(request.url);
     try {
-      if (url.pathname === "/health") return json({ ok: true, now: new Date().toISOString() });
-      if (url.pathname === "/market") return await handleMarket();
-      if (url.pathname === "/asset") return await handleAsset(url);
+      if (url.pathname === "/health") return await handleHealth(env || {});
+      if (url.pathname === "/market") return await withCache(request, 300, () => handleMarket(env || {}));
+      if (url.pathname === "/asset") return await withCache(request, 1800, () => handleAsset(request, env || {}));
+      if (url.pathname === "/diagnose") return await handleDiagnose(request, env || {});
+      if (url.pathname === "/news") {
+        const symbol = url.searchParams.get("symbol") || "";
+        const news = await getFinnhubNews(symbol, symbol, env || {});
+        return json({ symbol, news, sentimentScore: sentimentScore(news) });
+      }
       return json({ error: "Not Found" }, 404);
     } catch (error) {
       return json({ error: error.message || String(error) }, 500);
