@@ -19,7 +19,7 @@
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Tushare-Token, X-EODHD-Token, X-Finnhub-Key"
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Tushare-Token, X-EODHD-Token, X-EODHD-API-Key, X-Finnhub-Key, X-Finnhub-API-Key"
 };
 
 function json(data, status = 200) {
@@ -49,8 +49,10 @@ function round(v) {
 }
 
 function classifySymbol(raw) {
-  const s = String(raw || "").trim().toUpperCase();
+  let s = String(raw || "").trim().toUpperCase();
   if (!s) return { raw: s, market: "UNKNOWN", type: "unknown", providerSymbol: "" };
+  const explicitCn = s.match(/^(\d{6})\.(SH|SZ|BJ)$/);
+  if (explicitCn) s = explicitCn[1];
 
   if (/^\d{6}$/.test(s)) {
     if (/^(15|16)\d{4}$/.test(s)) return { raw: s, market: "CN", type: "fund", exchange: "SZ", tsCode: `${s}.SZ`, yahoo: `${s}.SZ` };
@@ -311,7 +313,7 @@ function dataQualityReport(asset) {
 }
 
 async function withCache(request, ttlSeconds, producer) {
-  if (request.headers.get("X-Tushare-Token") || request.headers.get("X-EODHD-Token") || request.headers.get("X-Finnhub-Key")) {
+  if (request.headers.get("X-Tushare-Token") || request.headers.get("X-EODHD-Token") || request.headers.get("X-EODHD-API-Key") || request.headers.get("X-Finnhub-Key") || request.headers.get("X-Finnhub-API-Key")) {
     return await producer();
   }
   const cache = caches.default;
@@ -339,9 +341,9 @@ function envWithHeaderKeys(request, env = {}) {
   return {
     ...env,
     TUSHARE_TOKEN: env.TUSHARE_TOKEN || headers.get("X-Tushare-Token") || "",
-    EODHD_API_TOKEN: env.EODHD_API_TOKEN || headers.get("X-EODHD-Token") || "",
-    FINNHUB_API_KEY: env.FINNHUB_API_KEY || headers.get("X-Finnhub-Key") || "",
-    FRONTEND_KEY_MODE: Boolean(headers.get("X-Tushare-Token") || headers.get("X-EODHD-Token") || headers.get("X-Finnhub-Key"))
+    EODHD_API_TOKEN: env.EODHD_API_TOKEN || headers.get("X-EODHD-Token") || headers.get("X-EODHD-API-Key") || "",
+    FINNHUB_API_KEY: env.FINNHUB_API_KEY || headers.get("X-Finnhub-Key") || headers.get("X-Finnhub-API-Key") || "",
+    FRONTEND_KEY_MODE: Boolean(headers.get("X-Tushare-Token") || headers.get("X-EODHD-Token") || headers.get("X-EODHD-API-Key") || headers.get("X-Finnhub-Key") || headers.get("X-Finnhub-API-Key"))
   };
 }
 
@@ -503,8 +505,38 @@ async function handleHealth(env) {
       finnhub: Boolean(env.FINNHUB_API_KEY)
     },
     keyMode: env.FRONTEND_KEY_MODE ? "frontend-header-test" : "worker-secrets",
-    routes: ["/health", "/market", "/asset?symbol=600845", "/diagnose?symbol=600845", "/news?symbol=AAPL"]
+    routes: ["/health", "/market", "/asset?symbol=600845", "/quote?symbol=600845.SH", "/diagnose?symbol=600845", "/provider/test?provider=tushare", "/news?symbol=AAPL"]
   });
+}
+
+
+async function handleProviderTest(request, env) {
+  const url = new URL(request.url);
+  const provider = String(url.searchParams.get("provider") || "").toLowerCase();
+  const hasKey = {
+    tushare: Boolean(env.TUSHARE_TOKEN),
+    eodhd: Boolean(env.EODHD_API_TOKEN),
+    finnhub: Boolean(env.FINNHUB_API_KEY)
+  };
+  if (!provider || !(provider in hasKey)) return json({ ok: false, error: "Unknown provider" }, 400);
+  if (!hasKey[provider]) return json({ ok: false, provider, configured: false, error: `${provider} key not configured` }, 200);
+
+  try {
+    if (provider === "tushare") {
+      await tushare(env, "trade_cal", { exchange: "SSE", start_date: ymd(new Date(Date.now() - 7 * 24 * 3600 * 1000)), end_date: ymd(new Date()) }, "exchange,cal_date,is_open");
+    }
+    if (provider === "eodhd") {
+      const res = await fetch(`https://eodhd.com/api/eod/AAPL.US?api_token=${env.EODHD_API_TOKEN}&fmt=json&period=d&from=${new Date(Date.now() - 10 * 24 * 3600 * 1000).toISOString().slice(0,10)}`);
+      if (!res.ok) throw new Error(`EODHD HTTP ${res.status}`);
+    }
+    if (provider === "finnhub") {
+      const res = await fetch(`https://finnhub.io/api/v1/quote?symbol=AAPL&token=${env.FINNHUB_API_KEY}`);
+      if (!res.ok) throw new Error(`Finnhub HTTP ${res.status}`);
+    }
+    return json({ ok: true, provider, configured: true, keyMode: env.FRONTEND_KEY_MODE ? "frontend-header-test" : "worker-secrets" });
+  } catch (e) {
+    return json({ ok: false, provider, configured: true, error: e.message || String(e) }, 200);
+  }
 }
 
 export default {
@@ -515,8 +547,9 @@ export default {
     try {
       if (url.pathname === "/health") return await handleHealth(runtimeEnv);
       if (url.pathname === "/market") return await withCache(request, 300, () => handleMarket(runtimeEnv));
-      if (url.pathname === "/asset") return await withCache(request, 1800, () => handleAsset(request, runtimeEnv));
+      if (url.pathname === "/asset" || url.pathname === "/quote") return await withCache(request, 1800, () => handleAsset(request, runtimeEnv));
       if (url.pathname === "/diagnose") return await handleDiagnose(request, runtimeEnv);
+      if (url.pathname === "/provider/test") return await handleProviderTest(request, runtimeEnv);
       if (url.pathname === "/news") {
         const symbol = url.searchParams.get("symbol") || "";
         const news = await getFinnhubNews(symbol, symbol, runtimeEnv);
