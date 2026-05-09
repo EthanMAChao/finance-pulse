@@ -1,7 +1,7 @@
 {
-  "name": "Finance Pulse V4",
+  "name": "Finance Pulse V5",
   "short_name": "FinancePulse",
-  "description": "高置信动态股票基金决策模型 PWA V4",
+  "description": "动态行情、行业模型和新闻情绪决策 PWA V5",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

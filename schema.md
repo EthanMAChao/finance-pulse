@@ -41,3 +41,31 @@ https://your-api.com/asset/{symbol}
 - 当前缓存版本
 
 如果 GitHub 仓库中 data 被错误上传成普通文件，而不是文件夹，诊断会显示 market.json 或 assets.json 读取失败。
+
+
+## V5 动态资产字段
+
+资产 API 推荐返回：
+
+```json
+{
+  "asset": {
+    "symbol": "600845",
+    "name": "宝信软件",
+    "sector": "AI/软件",
+    "industry": "软件服务",
+    "assetType": "stock",
+    "sentimentScore": 58,
+    "news": [
+      {
+        "title": "相关新闻标题",
+        "source": "Google News",
+        "publishedAt": "2026-05-09"
+      }
+    ],
+    "prices": []
+  }
+}
+```
+
+前端会自动根据 `sector`、`industry`、`name`、`assetType` 匹配模型。

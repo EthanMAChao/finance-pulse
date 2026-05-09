@@ -61,5 +61,16 @@
       "regime filter",
       "local cache clear"
     ]
+  },
+  "_v5": {
+    "version": "V5",
+    "generatedAt": "2026-05-09T06:05:31.926238+00:00",
+    "addedChecks": [
+      "web worker async model execution",
+      "industry model auto matching",
+      "news sentiment input",
+      "Cloudflare Worker dynamic API template",
+      "live API setting guidance"
+    ]
   }
 }

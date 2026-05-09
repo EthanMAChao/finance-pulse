@@ -1,4 +1,4 @@
-# Finance Pulse V4
+# Finance Pulse V5
 
 V3 是高置信动态股票/基金决策模型版本。
 
@@ -24,3 +24,29 @@ GitHub Pages 只能托管前端。真实行情和 AI 摘要需要后端 API。
 - 模型新增趋势过滤强度选择。
 - 回测输出保留 Wilson 下界、Profit Factor、最大连续亏损和平均净收益。
 - 结果页新增数据质量提示。
+
+
+## V5 新增
+
+- 决策计算移到浏览器 Web Worker，减少点击“运行决策模型”时的卡顿。
+- 新增行业/资产类型自动匹配模型。
+- 新增新闻情绪接口字段，模型会读取 `asset.news` 并计算情绪分。
+- 新增 Cloudflare Worker 后端模板：`api/finance-worker.js`。
+- 前端不再假装静态 JSON 是实时行情。要实现真正动态，请部署 Worker 或自己的后端 API。
+- Worker 路由：
+  - `/health`
+  - `/market`
+  - `/asset?symbol=600845`
+
+## 手机端部署建议
+
+GitHub Pages 只放前端文件。  
+动态行情、新闻、市场情绪放到 Cloudflare Worker、Vercel、Azure Function 或你自己的后端。
+
+部署 Worker 后，在 App 设置页填写：
+
+市场 API：
+`https://你的worker.workers.dev/market`
+
+资产 API：
+`https://你的worker.workers.dev/asset?symbol={symbol}`
