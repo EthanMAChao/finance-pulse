@@ -45,3 +45,16 @@ https://你的worker.workers.dev/asset?symbol={symbol}
   - 成交量为0比例
   - 日期缺口
   - 是否为 demo provider
+
+
+## V11 前端 Header Key 模式
+
+如果不想配置 Worker Secrets，可以让前端用 Header 传 Key：
+
+- `X-Tushare-Token`
+- `X-EODHD-Token`
+- `X-Finnhub-Key`
+
+Worker 会通过 `envWithHeaderKeys()` 读取这些 Header。
+
+注意：这个模式只适合个人测试。

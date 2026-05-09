@@ -1,4 +1,4 @@
-// Finance Pulse V10 Cloudflare Worker
+// Finance Pulse V12 Cloudflare Worker
 //
 // Routes:
 //   GET /health
@@ -19,7 +19,7 @@
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Methods": "GET, OPTIONS",
-  "Access-Control-Allow-Headers": "Content-Type, Authorization"
+  "Access-Control-Allow-Headers": "Content-Type, Authorization, X-Tushare-Token, X-EODHD-Token, X-Finnhub-Key"
 };
 
 function json(data, status = 200) {
@@ -311,6 +311,9 @@ function dataQualityReport(asset) {
 }
 
 async function withCache(request, ttlSeconds, producer) {
+  if (request.headers.get("X-Tushare-Token") || request.headers.get("X-EODHD-Token") || request.headers.get("X-Finnhub-Key")) {
+    return await producer();
+  }
   const cache = caches.default;
   const cacheKey = new Request(request.url, request);
   const cached = await cache.match(cacheKey);
@@ -328,6 +331,18 @@ async function withCache(request, ttlSeconds, producer) {
     await cache.put(cacheKey, cachedResponse);
   } catch {}
   return response;
+}
+
+
+function envWithHeaderKeys(request, env = {}) {
+  const headers = request.headers;
+  return {
+    ...env,
+    TUSHARE_TOKEN: env.TUSHARE_TOKEN || headers.get("X-Tushare-Token") || "",
+    EODHD_API_TOKEN: env.EODHD_API_TOKEN || headers.get("X-EODHD-Token") || "",
+    FINNHUB_API_KEY: env.FINNHUB_API_KEY || headers.get("X-Finnhub-Key") || "",
+    FRONTEND_KEY_MODE: Boolean(headers.get("X-Tushare-Token") || headers.get("X-EODHD-Token") || headers.get("X-Finnhub-Key"))
+  };
 }
 
 async function handleAsset(request, env) {
@@ -404,7 +419,7 @@ async function handleMarket(env) {
   const modelMarket = marketModelFromIndices(indices);
   return json({
     updatedAt: new Date().toISOString(),
-    subtitle: "V10 生产自检 · 可部署版",
+    subtitle: "V12 代码审查修复版",
     market: {
       mode: "动态后端",
       summary: "后端会优先使用 Tushare/EODHD/Finnhub。未配置对应 Key 时，会降级到演示行情源或返回明确错误。"
@@ -480,13 +495,14 @@ async function handleDiagnose(request, env) {
 async function handleHealth(env) {
   return json({
     ok: true,
-    mode: "Finance Pulse V10 Worker",
+    mode: "Finance Pulse V12 Worker",
     now: new Date().toISOString(),
     providers: {
       tushare: Boolean(env.TUSHARE_TOKEN),
       eodhd: Boolean(env.EODHD_API_TOKEN),
       finnhub: Boolean(env.FINNHUB_API_KEY)
     },
+    keyMode: env.FRONTEND_KEY_MODE ? "frontend-header-test" : "worker-secrets",
     routes: ["/health", "/market", "/asset?symbol=600845", "/diagnose?symbol=600845", "/news?symbol=AAPL"]
   });
 }
@@ -495,14 +511,15 @@ export default {
   async fetch(request, env) {
     if (request.method === "OPTIONS") return new Response(null, { headers: CORS_HEADERS });
     const url = new URL(request.url);
+    const runtimeEnv = envWithHeaderKeys(request, env || {});
     try {
-      if (url.pathname === "/health") return await handleHealth(env || {});
-      if (url.pathname === "/market") return await withCache(request, 300, () => handleMarket(env || {}));
-      if (url.pathname === "/asset") return await withCache(request, 1800, () => handleAsset(request, env || {}));
-      if (url.pathname === "/diagnose") return await handleDiagnose(request, env || {});
+      if (url.pathname === "/health") return await handleHealth(runtimeEnv);
+      if (url.pathname === "/market") return await withCache(request, 300, () => handleMarket(runtimeEnv));
+      if (url.pathname === "/asset") return await withCache(request, 1800, () => handleAsset(request, runtimeEnv));
+      if (url.pathname === "/diagnose") return await handleDiagnose(request, runtimeEnv);
       if (url.pathname === "/news") {
         const symbol = url.searchParams.get("symbol") || "";
-        const news = await getFinnhubNews(symbol, symbol, env || {});
+        const news = await getFinnhubNews(symbol, symbol, runtimeEnv);
         return json({ symbol, news, sentimentScore: sentimentScore(news) });
       }
       return json({ error: "Not Found" }, 404);
