@@ -1,13 +1,13 @@
 {
-  "updatedAt": "2026-05-09T06:05:31.924181+00:00",
-  "subtitle": "V5 动态行情 · 行业模型",
+  "updatedAt": "2026-05-09T06:25:10.452318+00:00",
+  "subtitle": "V8 全市场路由 · 已测试",
   "market": {
     "mode": "风控优先",
-    "summary": "V5加入行业模型自动匹配、新闻情绪字段、Web Worker异步计算和Cloudflare Worker动态后端模板。"
+    "summary": "V8新增A股/基金/美股代码路由、市场环境过滤、置信等级和更完整的批量测试。未部署后端时仍为本地演示。"
   },
   "decision": {
-    "score": 83,
-    "conclusion": "如果未部署后端，页面仍只能读取示例数据；部署 Worker 后，刷新按钮会重新请求实时市场接口。"
+    "score": 86,
+    "conclusion": "V8可以识别A股、A股ETF/基金、美股/ETF和港股格式，并把标的路由给对应行业/资产模型。真实准确率必须通过后端历史数据持续验证。"
   },
   "indices": [
     {
@@ -25,14 +25,14 @@
   ],
   "homeSignals": [
     {
-      "icon": "🧪",
-      "title": "数据诊断",
-      "text": "设置页可检查 data/market.json 与 data/assets.json 是否路径正确。"
+      "icon": "🌐",
+      "title": "全市场代码路由",
+      "text": "识别A股、A股ETF/基金、美股/ETF、港股代码格式。"
     },
     {
-      "icon": "🛡️",
-      "title": "止损模拟",
-      "text": "回测已纳入止损、交易成本、PF、Wilson下界和最大连亏。"
+      "icon": "🧪",
+      "title": "批量测试",
+      "text": "包内包含多轮模型测试报告，可复验行业匹配与回测计算。"
     }
   ],
   "tracks": [
@@ -172,5 +172,11 @@
       "level": "高",
       "text": "极端行情、政策突变、流动性冲击可能导致模型失效。"
     }
-  ]
+  ],
+  "modelMarket": {
+    "riskScore": 58,
+    "breadthScore": 56,
+    "trendScore": 57,
+    "sentimentScore": 55
+  }
 }
