@@ -100,7 +100,7 @@ https://your-api.com/asset/{symbol}
 如果缺少 sector / industry，前端会退回到 symbol 和 name 的关键词匹配。
 
 
-## V8 全市场路由
+## V10 全市场路由
 
 前端识别规则：
 
@@ -112,3 +112,55 @@ https://your-api.com/asset/{symbol}
 - 0000.HK / 00000.HK：港股
 
 真实生产版本仍应以后端证券主数据为准。
+
+
+## V10 Worker 返回结构
+
+`GET /asset?symbol=600845` 返回：
+
+```json
+{
+  "asset": {
+    "symbol": "600845",
+    "provider": "tushare",
+    "market": "CN",
+    "exchange": "SH",
+    "name": "宝信软件",
+    "assetType": "stock",
+    "sector": "软件开发",
+    "industry": "软件开发",
+    "news": [],
+    "sentimentScore": 50,
+    "prices": [
+      {
+        "date": "2026-05-08",
+        "open": 1,
+        "high": 1,
+        "low": 1,
+        "close": 1,
+        "volume": 100
+      }
+    ]
+  }
+}
+```
+
+
+## V10 生产自检接口
+
+`GET /diagnose?symbol=600845`
+
+返回：
+
+```json
+{
+  "ok": true,
+  "symbol": "600845",
+  "provider": "tushare",
+  "rows": 720,
+  "productionReady": true,
+  "issues": []
+}
+```
+
+如果 `productionReady` 为 false，前端模型会阻断高置信实盘建议。

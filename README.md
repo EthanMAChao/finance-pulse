@@ -1,4 +1,4 @@
-# Finance Pulse V8
+# Finance Pulse V10
 
 V3 是高置信动态股票/基金决策模型版本。
 
@@ -72,7 +72,7 @@ GitHub Pages 只放前端文件。
 - 交付前运行 Node 测试，并生成 TEST_REPORT.json。
 
 
-## V8 改善点
+## V10 改善点
 
 - 新增全市场代码路由：A股沪市/深市/北交所、A股ETF/基金、美股/ETF、港股格式。
 - 新增 `data/universe.json`，用于维护市场路由和行业关键词。
@@ -81,3 +81,63 @@ GitHub Pages 只放前端文件。
 - 新增更多本地基金和股票样例。
 - 保留历史回测门槛，但明确说明 90% 是历史筛选目标，不是未来保证。
 - 增加多轮测试报告，测试覆盖 20+ 个股票/基金样例。
+
+
+## V10 真实数据源接入
+
+V10 新增 `api/finance-worker.js`，作为真实后端模板。
+
+已接入的后端数据源：
+
+- Tushare：A股股票、A股基金/ETF 历史行情与基础信息。
+- EODHD：美股、ETF、港股及全球市场历史行情兜底。
+- Finnhub：公司新闻与新闻情绪输入。
+- Yahoo chart endpoint：仅作为无 Key 时的演示兜底，不建议生产使用。
+
+### 部署后端
+
+```bash
+cd api
+npm install -g wrangler
+wrangler login
+wrangler secret put TUSHARE_TOKEN
+wrangler secret put EODHD_API_TOKEN
+wrangler secret put FINNHUB_API_KEY
+wrangler deploy
+```
+
+部署完成后，在 App 设置页填写：
+
+```text
+市场 API: https://你的worker.workers.dev/market
+资产 API: https://你的worker.workers.dev/asset?symbol={symbol}
+```
+
+### 重要边界
+
+V10 只是把真实数据源接入代码写好了。只有你配置真实 API Key 并部署 Worker 后，App 才会真正动态读取行情、新闻和情绪。
+
+
+## V10 生产可用性改造
+
+V10 的重点不是继续增加模型名，而是把“能否实际应用”做成可检查、可阻断、可部署。
+
+新增内容：
+
+- Worker 新增 `/diagnose?symbol=600845`
+- Worker 增加数据质量报告
+- Worker 增加 Cloudflare Cache API 缓存
+- 前端设置页新增“生产可用性自检”
+- 模型新增生产数据检查
+- 演示源、本地样例、Yahoo demo 不允许输出“高置信实盘建议”
+- 历史行情少于 500 个交易日时阻断高置信
+- 缺少 provider / industry / sector 时降低可信度
+- 测试报告继续打包
+
+实际应用前，必须：
+
+1. 部署 Worker。
+2. 配置 TUSHARE_TOKEN、EODHD_API_TOKEN、FINNHUB_API_KEY。
+3. 在设置页填写 Worker 的 `/market` 和 `/asset?symbol={symbol}`。
+4. 运行生产自检。
+5. A股和美股样例都通过后，再看模型输出。

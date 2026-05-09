@@ -1,4 +1,4 @@
-const CACHE_NAME = 'finance-pulse-v8-20260511';
+const CACHE_NAME = 'finance-pulse-v10-20260511';
 const STATIC_ASSETS = [
   './',
   './index.html',

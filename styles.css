@@ -252,3 +252,27 @@ button{cursor:pointer}
   border-color:rgba(255,107,107,.28);
   background:rgba(255,107,107,.10);
 }
+
+
+/* V9 provider status */
+.diag-item b.up, #providerTushare.up, #providerEodhd.up, #providerFinnhub.up, #providerMode.up{color:var(--green)}
+.diag-item b.down, #providerTushare.down, #providerEodhd.down, #providerFinnhub.down, #providerMode.down{color:var(--red)}
+.diag-item b.warn, #providerTushare.warn, #providerEodhd.warn, #providerFinnhub.warn, #providerMode.warn{color:var(--yellow)}
+
+
+/* V10 production readiness */
+#prodHealth.up,#prodCN.up,#prodUS.up,#prodMode.up{color:var(--green)}
+#prodHealth.warn,#prodCN.warn,#prodUS.warn,#prodMode.warn{color:var(--yellow)}
+#prodHealth.down,#prodCN.down,#prodUS.down,#prodMode.down{color:var(--red)}
+.prod-banner{
+  padding:12px;
+  border-radius:18px;
+  margin:10px 0 12px;
+  font-size:12px;
+  line-height:1.55;
+  border:1px solid rgba(255,255,255,.12);
+  background:rgba(255,255,255,.06);
+}
+.prod-banner.good{color:var(--green);border-color:rgba(57,217,138,.30);background:rgba(57,217,138,.10)}
+.prod-banner.warn{color:var(--yellow);border-color:rgba(255,209,102,.30);background:rgba(255,209,102,.10)}
+.prod-banner.bad{color:var(--red);border-color:rgba(255,107,107,.30);background:rgba(255,107,107,.10)}

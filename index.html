@@ -58,7 +58,7 @@
       <section class="hero hero-compact">
         <div class="sentiment">
           <h2>股票 / 基金决策</h2>
-          <p>V8 采用全市场代码路由、多行业模型、组合评分、市场环境过滤、新闻情绪与高置信回测。A股、ETF、美股代码会自动识别市场；未部署后端时使用本地样例跑通流程。</p>
+          <p>V10 加入生产自检、真实数据阻断、后端诊断和部署检查。只有 Worker、API Key、真实行情、新闻源、数据质量全部达标时，系统才进入可实际应用模式。</p>
         </div>
       </section>
 
@@ -129,7 +129,7 @@
       <section class="section" id="decisionOutput">
         <section class="ai-card">
           <h3>模型说明</h3>
-          <p>V8 会显示综合分、趋势分、动量分、风险分、置信等级、市场环境、组合模型评分、模型解释、历史胜率、Wilson 置信下界、Profit Factor、最大连续亏损和阻断原因。模型默认宁可错过，也不随意给买入提示。</p>
+          <p>V10 会显示综合分、趋势分、动量分、风险分、置信等级、市场环境、组合模型评分、模型解释、历史胜率、Wilson 置信下界、Profit Factor、最大连续亏损和阻断原因。模型默认宁可错过，也不随意给买入提示。</p>
         </section>
       </section>
     </section>
@@ -243,6 +243,38 @@
         <button class="secondary-btn" id="runDiagBtn" type="button">检查数据路径</button>
         <button class="secondary-btn" id="clearCacheBtn" type="button">清理本地缓存</button>
         <p class="help-text">如果 data 文件夹建错，这里通常会显示 market.json 或 assets.json 读取失败。正确路径必须是 <code>data/market.json</code> 和 <code>data/assets.json</code>。</p>
+      </section>
+
+
+      <section class="section settings-card">
+        <div class="section-title">
+          <h3>真实数据源状态</h3>
+          <span>Worker</span>
+        </div>
+        <div class="diag-grid">
+          <div class="diag-item"><span>Tushare</span><b id="providerTushare">未检查</b></div>
+          <div class="diag-item"><span>EODHD</span><b id="providerEodhd">未检查</b></div>
+          <div class="diag-item"><span>Finnhub</span><b id="providerFinnhub">未检查</b></div>
+          <div class="diag-item"><span>后端模式</span><b id="providerMode">本地/未知</b></div>
+        </div>
+        <button class="secondary-btn" id="checkProviderBtn" type="button">检查 Worker 数据源</button>
+        <p class="help-text">如果没有设置 API Key，这里会显示未配置。未配置时，App 只能用本地演示数据跑通流程。</p>
+      </section>
+
+
+      <section class="section settings-card">
+        <div class="section-title">
+          <h3>生产可用性自检</h3>
+          <span>必须通过</span>
+        </div>
+        <div class="diag-grid">
+          <div class="diag-item"><span>Worker /health</span><b id="prodHealth">未检查</b></div>
+          <div class="diag-item"><span>A股样例 600845</span><b id="prodCN">未检查</b></div>
+          <div class="diag-item"><span>美股样例 AAPL</span><b id="prodUS">未检查</b></div>
+          <div class="diag-item"><span>生产模式</span><b id="prodMode">未通过</b></div>
+        </div>
+        <button class="secondary-btn" id="runProdCheckBtn" type="button">运行生产自检</button>
+        <p class="help-text">实际应用前，至少要通过 Worker 健康检查、A股样例、美股样例和真实数据源检查。未通过时，模型会阻断“高置信”建议。</p>
       </section>
 
       <section class="section settings-card">

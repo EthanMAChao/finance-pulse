@@ -207,5 +207,44 @@
       "expanded sample assets and ETFs",
       "3 market scenarios x 26 symbols x 3 runs tested"
     ]
+  },
+  "_v9": {
+    "version": "V9",
+    "generatedAt": "2026-05-09T06:31:45.926598+00:00",
+    "allTestsPassed": true,
+    "summary": {
+      "modelSymbols": 26,
+      "modelRuns": 3,
+      "workerSyntaxChecked": true,
+      "requiredFilesPresent": true
+    },
+    "improvements": [
+      "Tushare Worker integration template",
+      "EODHD Worker integration template",
+      "Finnhub news integration template",
+      "Worker health/provider status endpoint",
+      "frontend provider status check",
+      "API key kept in Worker secrets, not GitHub Pages"
+    ]
+  },
+  "_v10": {
+    "version": "V10",
+    "generatedAt": "2026-05-09T06:35:06.608936+00:00",
+    "allTestsPassed": true,
+    "summary": {
+      "modelSymbols": 26,
+      "modelRuns": 3,
+      "workerSyntaxChecked": true,
+      "diagnoseRoutePresent": true,
+      "demoHighConfidenceBlocked": true
+    },
+    "improvements": [
+      "production readiness check",
+      "worker diagnose route",
+      "Cloudflare Cache API wrapper",
+      "demo/local data high-confidence block",
+      "model production data quality gate",
+      "frontend production self-check panel"
+    ]
   }
 }

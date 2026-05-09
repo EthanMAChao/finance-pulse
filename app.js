@@ -84,9 +84,56 @@ async function clearLocalCache(){
   showToast("本地缓存已清理，请刷新页面");
 }
 
+
+function workerBaseFromApi(){
+  const market=getMarketApiUrl();
+  const asset=getAssetApiUrl();
+  const candidate = market.startsWith("http") ? market : (asset.startsWith("http") ? asset : "");
+  if(!candidate)return "";
+  try{
+    const u=new URL(candidate);
+    return u.origin;
+  }catch{return "";}
+}
+async function checkProviderStatus(){
+  const base=workerBaseFromApi();
+  const set=(id,text,cls)=>{const el=$(id); if(el){el.textContent=text; el.className=cls||"";}};
+  if(!base){
+    set("providerMode","未配置 Worker","warn");
+    set("providerTushare","未检查","warn");
+    set("providerEodhd","未检查","warn");
+    set("providerFinnhub","未检查","warn");
+    showToast("请先填写 Worker API 地址");
+    return;
+  }
+  try{
+    const r=await fetch(base+"/health?t="+Date.now(),{cache:"no-store"});
+    const data=await r.json();
+    const providers=data.providers||{};
+    set("providerMode",data.mode||"Worker","up");
+    set("providerTushare",providers.tushare?"已配置":"未配置",providers.tushare?"up":"warn");
+    set("providerEodhd",providers.eodhd?"已配置":"未配置",providers.eodhd?"up":"warn");
+    set("providerFinnhub",providers.finnhub?"已配置":"未配置",providers.finnhub?"up":"warn");
+    showToast("数据源状态已更新");
+  }catch(e){
+    set("providerMode","连接失败","down");
+    showToast("Worker 健康检查失败");
+  }
+}
+function fillWorkerUrls(){
+  const example="https://你的worker.workers.dev";
+  $("marketApiUrlInput").value=example+"/market";
+  $("assetApiUrlInput").value=example+"/asset?symbol={symbol}";
+  showToast("已填入 Worker 接口格式，请替换域名");
+}
+
 function initSettings(){$("marketApiUrlInput").value=getMarketApiUrl();$("assetApiUrlInput").value=getAssetApiUrl();$("saveMarketApiBtn").onclick=()=>{localStorage.setItem(STORAGE_KEYS.marketApiUrl,$("marketApiUrlInput").value.trim()||DEFAULT_MARKET_API_URL);fetchMarketData()};$("resetMarketApiBtn").onclick=()=>{localStorage.removeItem(STORAGE_KEYS.marketApiUrl);$("marketApiUrlInput").value=DEFAULT_MARKET_API_URL;fetchMarketData()};$("saveAssetApiBtn").onclick=async()=>{localStorage.setItem(STORAGE_KEYS.assetApiUrl,$("assetApiUrlInput").value.trim()||DEFAULT_ASSET_API_URL);appState.assetsData=null;await loadAssetUniverse();showToast("资产数据源已保存")};$("resetAssetApiBtn").onclick=async()=>{localStorage.removeItem(STORAGE_KEYS.assetApiUrl);$("assetApiUrlInput").value=DEFAULT_ASSET_API_URL;appState.assetsData=null;await loadAssetUniverse();showToast("资产数据源已恢复")};document.querySelectorAll(".switch").forEach(sw=>{const key=sw.dataset.setting;const sk=key==="riskFirst"?STORAGE_KEYS.riskFirst:STORAGE_KEYS.autoRefresh;if(localStorage.getItem(sk)==="false")sw.classList.remove("on");sw.onclick=()=>{sw.classList.toggle("on");localStorage.setItem(sk,sw.classList.contains("on")?"true":"false");setupAutoRefresh()}});
 if($("runDiagBtn"))$("runDiagBtn").onclick=runDiagnostics;
 if($("clearCacheBtn"))$("clearCacheBtn").onclick=clearLocalCache;
+if($("checkProviderBtn"))$("checkProviderBtn").onclick=checkProviderStatus;
+if($("runProdCheckBtn"))$("runProdCheckBtn").onclick=runProductionCheck;
+if($("useWorkerMarketBtn"))$("useWorkerMarketBtn").onclick=fillWorkerUrls;
+if($("useWorkerAssetBtn"))$("useWorkerAssetBtn").onclick=fillWorkerUrls;
 }
 function setupInstallButton(){window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();appState.deferredPrompt=e});$("installBtn").onclick=async()=>{if(appState.deferredPrompt){appState.deferredPrompt.prompt();await appState.deferredPrompt.userChoice;appState.deferredPrompt=null}else showToast("请用浏览器菜单添加到主屏幕")}}
 function setupAutoRefresh(){if(appState.autoRefreshTimer)clearInterval(appState.autoRefreshTimer);if(localStorage.getItem(STORAGE_KEYS.autoRefresh)!=="false")appState.autoRefreshTimer=setInterval(()=>fetchMarketData(),5*60*1000)}

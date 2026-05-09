@@ -108,6 +108,18 @@
     return clamp(50+score*10,0,100);
   }
 
+
+  function productionDataQuality(asset){
+    const provider=String(asset.provider||asset.dataSource||"").toLowerCase();
+    const warnings=[];
+    const isDemo=/demo|local|sample|synthetic|yahoo-demo/.test(provider);
+    if(isDemo)warnings.push("当前数据源为演示/本地/兜底源，不允许输出高置信实盘建议。");
+    if(!asset.provider && !asset.dataSource)warnings.push("资产数据缺少 provider/dataSource 字段。");
+    if(!Array.isArray(asset.prices) || asset.prices.length<500)warnings.push("历史行情少于500个交易日，实盘统计稳定性不足。");
+    if(asset.assetType==="stock" && !asset.industry && !asset.sector)warnings.push("缺少行业字段，行业模型匹配可靠性下降。");
+    return {productionReady:warnings.length===0,warnings,provider:provider||"unknown"};
+  }
+
   function dataQuality(asset){
     const prices=(asset.prices||[]).slice().sort((a,b)=>new Date(a.date)-new Date(b.date));
     const issues=[];
@@ -196,7 +208,7 @@
   function analyzeAsset(asset,options={}){
     if(!asset||!Array.isArray(asset.prices))throw new Error("资产数据格式错误，缺少 prices。");
     const clean=asset.prices.filter(p=>Number(p.close)>0).sort((a,b)=>new Date(a.date)-new Date(b.date));
-    const quality=dataQuality({...asset,prices:clean});
+    const quality=dataQuality({...asset,prices:clean});const prodQuality=productionDataQuality({...asset,prices:clean});
     if(clean.length<300)throw new Error("历史数据不足。V6 至少需要约300个交易日。");
     const normalized={...asset,prices:clean};const profile=inferModelProfile(normalized);const sentimentScore=newsSentimentScore(normalized);const regime=marketRegimeAdjustment(options.market||asset.market||{});const closes=clean.map(p=>Number(p.close));const current=closes[closes.length-1];const latest=clean[clean.length-1];
     const periods=[["3M","3个月",63],["6M","6个月",126],["9M","9个月",189],["1Y","1年",252],["3Y","3年",756]];
@@ -207,6 +219,7 @@
     if(snap.trendScore<profile.trendMin)blockers.push(`${profile.name}要求趋势分至少 ${profile.trendMin}，当前 ${snap.trendScore}。`);
     if(sentimentScore<35)blockers.push(`新闻情绪偏弱，情绪分 ${sentimentScore}。`);
     if(regime.extraBlock)blockers.push(`市场环境为${regime.name}，模型强制降低进攻等级。`);
+    if(!prodQuality.productionReady)blockers.push(...prodQuality.warnings);
     if(!bt.pass)blockers.push(`历史高置信回测未通过：胜率 ${(bt.winRate*100).toFixed(1)}%，Wilson下界 ${(bt.wilsonLowerBound*100).toFixed(1)}%。`);
     if(bt.total<bt.minSignals)blockers.push(`信号次数 ${bt.total} 次，少于最低门槛 ${bt.minSignals} 次。`);
     if(bt.profitFactor<1.6)blockers.push(`Profit Factor ${bt.profitFactor.toFixed(2)}，低于1.60。`);
@@ -214,7 +227,7 @@
     if(!snap.strictSignal)blockers.push("当前未触发严格趋势/动量/风险共振信号。");
     if(snap.rsi14>72)blockers.push("RSI偏热，追高风险上升。");
     let action="回避或仅观察",level="偏弱",position="0% - 10%",confidence="不达标";
-    if(bt.pass&&snap.strictSignal&&snap.riskScore>=profile.riskMin&&snap.momentumScore>=profile.momentumMin&&snap.trendScore>=profile.trendMin&&sentimentScore>=35&&!regime.extraBlock){action="高置信：可小仓分批关注";level="高置信";position=adjustPosition("15% - 30%",regime.positionMultiplier);confidence="达标"}
+    if(bt.pass&&snap.strictSignal&&snap.riskScore>=profile.riskMin&&snap.momentumScore>=profile.momentumMin&&snap.trendScore>=profile.trendMin&&sentimentScore>=35&&!regime.extraBlock&&prodQuality.productionReady){action="高置信：可小仓分批关注";level="高置信";position=adjustPosition("15% - 30%",regime.positionMultiplier);confidence="达标"}
     else if(snap.decisionScore>=76&&snap.riskScore>=60){action="等待回踩确认";level="可跟踪";position=adjustPosition("5% - 20%",regime.positionMultiplier);confidence="未达高置信门槛"}
     const warnings=[];
     if(blockers.length)warnings.push(...blockers);
@@ -226,7 +239,7 @@
     else entryRules.push("当前不满足高置信条件，优先等待胜率、趋势、动量、风险四项同时改善。");
     if(snap.current>snap.ma20&&snap.current>snap.ma60)entryRules.push("价格站上20日与60日均线，趋势结构尚可。");
     if(snap.rsi14>70)entryRules.push("短线热度偏高，等待分歧后再评估。");
-    return {symbol:asset.symbol,name:asset.name||asset.symbol,assetType:asset.assetType||"asset",sector:asset.sector||"",industry:asset.industry||"",localWarning:asset.localWarning||"",latestDate:latest.date,latestClose:current,ma:{ma20:snap.ma20,ma60:snap.ma60,ma120:snap.ma120,ma250:snap.ma250},rsi14:snap.rsi14,volumeConfirm:snap.volumeConfirm,dataQuality:quality,modelProfile:profile,news:asset.news||[],sentimentScore,scores:{decisionScore:snap.decisionScore,trendScore:snap.trendScore,momentumScore:snap.momentumScore,riskScore:snap.riskScore,multiPeriodScore:Math.round(mean(periodResults.map(x=>x.score)))},backtest:bt,action,level,position,confidence,periodResults,warnings,entryRules,sparkline:closes.slice(-90),marketRegime:regime,confidenceTier:confidenceTier({scores:{decisionScore:snap.decisionScore},backtest:bt}),subModels:subModelScores(snap,bt,periodResults,sentimentScore),decisionReasons:makeDecisionReasons({scores:{decisionScore:snap.decisionScore,trendScore:snap.trendScore,momentumScore:snap.momentumScore,riskScore:snap.riskScore,multiPeriodScore:Math.round(mean(periodResults.map(x=>x.score)))},backtest:bt,modelProfile:profile})}
+    return {symbol:asset.symbol,name:asset.name||asset.symbol,assetType:asset.assetType||"asset",sector:asset.sector||"",industry:asset.industry||"",localWarning:asset.localWarning||"",latestDate:latest.date,latestClose:current,ma:{ma20:snap.ma20,ma60:snap.ma60,ma120:snap.ma120,ma250:snap.ma250},rsi14:snap.rsi14,volumeConfirm:snap.volumeConfirm,dataQuality:quality,productionDataQuality:prodQuality,modelProfile:profile,news:asset.news||[],sentimentScore,scores:{decisionScore:snap.decisionScore,trendScore:snap.trendScore,momentumScore:snap.momentumScore,riskScore:snap.riskScore,multiPeriodScore:Math.round(mean(periodResults.map(x=>x.score)))},backtest:bt,action,level,position,confidence,periodResults,warnings,entryRules,sparkline:closes.slice(-90),marketRegime:regime,confidenceTier:confidenceTier({scores:{decisionScore:snap.decisionScore},backtest:bt}),subModels:subModelScores(snap,bt,periodResults,sentimentScore),decisionReasons:makeDecisionReasons({scores:{decisionScore:snap.decisionScore,trendScore:snap.trendScore,momentumScore:snap.momentumScore,riskScore:snap.riskScore,multiPeriodScore:Math.round(mean(periodResults.map(x=>x.score)))},backtest:bt,modelProfile:profile})}
   }
   const root=typeof self!=="undefined"?self:(typeof window!=="undefined"?window:globalThis);root.FPDecisionModel={analyzeAsset,inferModelProfile};
 })();
