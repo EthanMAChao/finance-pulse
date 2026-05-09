@@ -1,106 +1,65 @@
 {
   "DEMO_AI": {
-    "decisionScore": 50,
-    "trendScore": 50,
-    "momentumScore": 48,
-    "riskScore": 51,
-    "rsi14": 42.4,
-    "currentStrictSignal": false,
-    "backtest20d": {
-      "signals": 0,
-      "wins": 0,
-      "winRate": 0,
-      "avgForwardReturn": 0
+    "days": 900,
+    "latestClose": 105.27,
+    "returnsPct": {
+      "3M": 25.46,
+      "6M": 35.08,
+      "1Y": 32.73,
+      "3Y": 57.52
     },
-    "backtest40d": {
-      "signals": 0,
-      "wins": 0,
-      "winRate": 0,
-      "avgForwardReturn": 0
-    },
-    "backtest60d": {
-      "signals": 0,
-      "wins": 0,
-      "winRate": 0,
-      "avgForwardReturn": 0
-    }
+    "maxDrawdown1Y": -25.43,
+    "volatility1Y": 29.47,
+    "note": "Detailed V3 decision runs in browser model.js; this file validates packaged mock data coverage."
   },
-  "DEMO_DEF": {
-    "decisionScore": 78,
-    "trendScore": 85,
-    "momentumScore": 64,
-    "riskScore": 82,
-    "rsi14": 58.4,
-    "currentStrictSignal": false,
-    "backtest20d": {
-      "signals": 0,
-      "wins": 0,
-      "winRate": 0,
-      "avgForwardReturn": 0
+  "DEMO_DIV": {
+    "days": 900,
+    "latestClose": 11.58,
+    "returnsPct": {
+      "3M": 2.66,
+      "6M": -0.94,
+      "1Y": 3.76,
+      "3Y": -15.1
     },
-    "backtest40d": {
-      "signals": 0,
-      "wins": 0,
-      "winRate": 0,
-      "avgForwardReturn": 0
-    },
-    "backtest60d": {
-      "signals": 0,
-      "wins": 0,
-      "winRate": 0,
-      "avgForwardReturn": 0
-    }
+    "maxDrawdown1Y": -12.03,
+    "volatility1Y": 13.94,
+    "note": "Detailed V3 decision runs in browser model.js; this file validates packaged mock data coverage."
   },
   "DEMO_CYCLE": {
-    "decisionScore": 41,
-    "trendScore": 15,
-    "momentumScore": 43,
-    "riskScore": 51,
-    "rsi14": 52.0,
-    "currentStrictSignal": false,
-    "backtest20d": {
-      "signals": 0,
-      "wins": 0,
-      "winRate": 0,
-      "avgForwardReturn": 0
+    "days": 900,
+    "latestClose": 19.49,
+    "returnsPct": {
+      "3M": -1.02,
+      "6M": 2.36,
+      "1Y": 24.46,
+      "3Y": -43.03
     },
-    "backtest40d": {
-      "signals": 0,
-      "wins": 0,
-      "winRate": 0,
-      "avgForwardReturn": 0
-    },
-    "backtest60d": {
-      "signals": 0,
-      "wins": 0,
-      "winRate": 0,
-      "avgForwardReturn": 0
-    }
+    "maxDrawdown1Y": -26.51,
+    "volatility1Y": 39.99,
+    "note": "Detailed V3 decision runs in browser model.js; this file validates packaged mock data coverage."
   },
   "DEMO_WEAK": {
-    "decisionScore": 18,
-    "trendScore": 15,
-    "momentumScore": 15,
-    "riskScore": 19,
-    "rsi14": 19.2,
-    "currentStrictSignal": false,
-    "backtest20d": {
-      "signals": 0,
-      "wins": 0,
-      "winRate": 0,
-      "avgForwardReturn": 0
+    "days": 900,
+    "latestClose": 29.86,
+    "returnsPct": {
+      "3M": 14.27,
+      "6M": 46.52,
+      "1Y": 92.15,
+      "3Y": 73.91
     },
-    "backtest40d": {
-      "signals": 0,
-      "wins": 0,
-      "winRate": 0,
-      "avgForwardReturn": 0
-    },
-    "backtest60d": {
-      "signals": 0,
-      "wins": 0,
-      "winRate": 0,
-      "avgForwardReturn": 0
-    }
+    "maxDrawdown1Y": -29.67,
+    "volatility1Y": 46.49,
+    "note": "Detailed V3 decision runs in browser model.js; this file validates packaged mock data coverage."
+  },
+  "_v4": {
+    "version": "V4",
+    "generatedAt": "2026-05-09T05:51:07.246902+00:00",
+    "addedChecks": [
+      "data path diagnostics",
+      "data quality checks",
+      "stop-loss simulation",
+      "regime filter",
+      "local cache clear"
+    ]
   }
 }

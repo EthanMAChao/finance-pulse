@@ -11,16 +11,19 @@
   <link rel="icon" href="icon-192.png" />
   <link rel="apple-touch-icon" href="icon-192.png" />
   <link rel="stylesheet" href="styles.css" />
-  <title>Finance Pulse Model V2</title>
+  <title>Finance Pulse V4</title>
 </head>
 <body>
   <main class="app">
     <header class="topbar">
       <div class="brand">
         <div class="logo">FP</div>
-        <div><h1>Finance Pulse</h1><p id="subTitle">高置信决策模型 · 风控优先</p></div>
+        <div>
+          <h1>Finance Pulse</h1>
+          <p id="subTitle">V4 高置信决策 · 数据诊断</p>
+        </div>
       </div>
-      <button class="refresh" id="refreshBtn">刷新</button>
+      <button class="refresh" id="refreshBtn" type="button">刷新</button>
     </header>
 
     <section id="home" class="page active">
@@ -30,121 +33,253 @@
             <h2 id="marketMode">加载中</h2>
             <p id="marketSummary">正在读取动态数据源。</p>
           </div>
-          <div class="score-ring" id="scoreRing"><div class="score-ring-inner"><strong id="decisionScore">--</strong><span>决策分</span></div></div>
+          <div class="score-ring" id="scoreRing">
+            <div class="score-ring-inner">
+              <strong id="decisionScore">--</strong>
+              <span>系统分</span>
+            </div>
+          </div>
         </div>
         <div class="index-row" id="indexRow"></div>
       </section>
+
       <section class="section ai-card">
-        <div class="title-row"><h3>今日作战结论</h3><span class="badge blue" id="dataStatus">动态</span></div>
+        <div class="title-row">
+          <h3>今日作战结论</h3>
+          <span class="badge blue" id="dataStatus">动态</span>
+        </div>
         <p id="aiConclusion">等待数据加载。</p>
       </section>
+
       <section class="section grid-2" id="homeSignals"></section>
     </section>
 
     <section id="model" class="page">
-      <section class="hero">
+      <section class="hero hero-compact">
         <div class="sentiment">
-          <h2>股票/基金决策</h2>
-          <p>模型采用“高置信门槛”。只有历史滚动回测达到目标胜率，并且趋势、风险、动量同时达标时，才输出高置信机会。</p>
+          <h2>股票 / 基金决策</h2>
+          <p>V4 采用“高置信门槛 + 数据健康检查 + 风险阻断”。模型会先校验行情质量，再计算多周期指标与 walk-forward 回测。只有历史信号质量、趋势、风险和统计置信度同时达标时，才允许输出高置信机会。</p>
         </div>
       </section>
 
-      <section class="section settings-card">
-        <div class="section-title"><h3>选择标的</h3><span>V2模型</span></div>
-        <div class="decision-inputs">
-          <input id="symbolInput" class="input" placeholder="输入代码，例如 600519 / 159915 / DEMO_AI" />
-          <select id="symbolSelect" class="select full"></select>
-          <div class="two-col">
-            <label class="field-label">目标胜率</label>
+      <section class="section input-card">
+        <div class="section-title">
+          <h3>输入标的</h3>
+          <span>OHLC 动态模型</span>
+        </div>
+
+        <input id="symbolInput" class="input" placeholder="输入代码，例如 600519 / 159915 / DEMO_AI" />
+        <select id="symbolSelect" class="select full"></select>
+
+        <div class="config-grid">
+          <label>
+            <span>目标胜率</span>
             <select id="targetWinRate" class="select full">
               <option value="0.90">90%</option>
               <option value="0.85">85%</option>
               <option value="0.80">80%</option>
             </select>
-          </div>
-          <div class="two-col">
-            <label class="field-label">预测窗口</label>
+          </label>
+          <label>
+            <span>预测窗口</span>
             <select id="forwardDays" class="select full">
               <option value="20">20个交易日</option>
               <option value="40">40个交易日</option>
               <option value="60">60个交易日</option>
             </select>
-          </div>
-          <button class="primary-btn" id="runDecisionBtn">运行决策模型</button>
+          </label>
+          <label>
+            <span>单边成本</span>
+            <select id="costBps" class="select full">
+              <option value="15">0.15%</option>
+              <option value="30">0.30%</option>
+              <option value="50">0.50%</option>
+            </select>
+          </label>
+          <label>
+            <span>信号门槛</span>
+            <select id="minSignals" class="select full">
+              <option value="8">至少8次</option>
+              <option value="12">至少12次</option>
+              <option value="20">至少20次</option>
+            </select>
+          </label>
+          <label>
+            <span>止损模拟</span>
+            <select id="stopLossPct" class="select full">
+              <option value="8">-8%</option>
+              <option value="10">-10%</option>
+              <option value="12">-12%</option>
+            </select>
+          </label>
+          <label>
+            <span>趋势过滤</span>
+            <select id="regimeFilter" class="select full">
+              <option value="strict">严格</option>
+              <option value="normal">普通</option>
+              <option value="loose">宽松</option>
+            </select>
+          </label>
         </div>
-        <p class="help-text">胜率是基于历史滚动回测的信号命中率，不代表未来保证收益。达不到目标胜率时，模型会自动降级为观察或回避。</p>
+
+        <button class="primary-btn" id="runDecisionBtn" type="button">运行决策模型</button>
+        <p class="help-text">提示：90% 是历史回测筛选门槛，不是未来收益承诺。真实行情需要后端 API 提供复权后的 OHLC 数据。</p>
       </section>
 
       <section class="section" id="decisionOutput">
         <section class="ai-card">
           <h3>模型说明</h3>
-          <p>V2模型先计算多周期收益、最大回撤、年化波动率、均线趋势和RSI，再进行滚动回测。模型只在历史信号精度达标时给出较高置信度建议。</p>
+          <p>V3 会显示综合分、趋势分、动量分、风险分、历史胜率、Wilson 置信下界、Profit Factor、最大连续亏损和阻断原因。模型默认宁可错过，也不随意给买入提示。</p>
         </section>
       </section>
     </section>
 
     <section id="track" class="page">
-      <section class="hero"><div class="sentiment"><h2>正确赛道</h2><p>赛道页用于筛选方向，不等于直接买入。强赛道也需要等待入场条件。</p></div></section>
+      <section class="hero hero-compact">
+        <div class="sentiment">
+          <h2>正确赛道</h2>
+          <p>赛道页用于筛选方向。强赛道也需要等待模型确认和入场条件。</p>
+        </div>
+      </section>
       <section class="section hot-list" id="trackList"></section>
     </section>
 
     <section id="hot" class="page">
-      <section class="hero"><div class="sentiment"><h2>热点追踪</h2><p>热点页用于判断资金方向。涨幅只是结果，持续性和扩散性更重要。</p></div></section>
-      <section class="section heat-card"><div class="heat-head"><b>主题热度</b><span class="badge hot" id="hotUpdateTime">--</span></div><div id="heatBars"></div></section>
+      <section class="hero hero-compact">
+        <div class="sentiment">
+          <h2>热点追踪</h2>
+          <p>热点页用于判断资金方向。涨幅只是结果，持续性、扩散性和风险位置更重要。</p>
+        </div>
+      </section>
+      <section class="section heat-card">
+        <div class="heat-head">
+          <b>主题热度</b>
+          <span class="badge hot" id="hotUpdateTime">--</span>
+        </div>
+        <div id="heatBars"></div>
+      </section>
       <section class="section hot-list" id="hotNews"></section>
     </section>
 
     <section id="radar" class="page">
-      <section class="hero"><div class="sentiment"><h2>机会雷达</h2><p>雷达页把“能不能看、能不能进、买错怎么办”拆成可执行条件。</p></div></section>
-      <div class="radar-wrap"><div class="radar"><div class="sweep"></div><div class="dot d1"></div><div class="dot d2"></div><div class="dot d3"></div><div class="radar-center"><b id="radarScore">--</b><span>机会分</span></div></div></div>
+      <section class="hero hero-compact">
+        <div class="sentiment">
+          <h2>机会雷达</h2>
+          <p>雷达页把“能不能看、能不能进、买错怎么办”拆成可执行条件。</p>
+        </div>
+      </section>
+      <div class="radar-wrap">
+        <div class="radar">
+          <div class="sweep"></div>
+          <div class="dot d1"></div>
+          <div class="dot d2"></div>
+          <div class="dot d3"></div>
+          <div class="radar-center">
+            <b id="radarScore">--</b>
+            <span>机会分</span>
+          </div>
+        </div>
+      </div>
       <section class="section grid-2" id="radarCards"></section>
-      <section class="section ai-card"><h3>散户执行纪律</h3><p id="disciplineText">等待数据加载。</p></section>
+      <section class="section ai-card">
+        <h3>执行纪律</h3>
+        <p id="disciplineText">等待数据加载。</p>
+      </section>
     </section>
 
     <section id="risk" class="page">
-      <section class="hero"><div class="sentiment"><h2>风险预警</h2><p>风险页优先提示“不能进”的情况。好的工具不只提示机会，也要阻止错误交易。</p></div></section>
+      <section class="hero hero-compact">
+        <div class="sentiment">
+          <h2>风险预警</h2>
+          <p>风险页优先提示“不能进”的情况。好的工具不只提示机会，也要阻止错误交易。</p>
+        </div>
+      </section>
       <section class="section risk-list" id="riskList"></section>
       <p class="disclaimer">提示：本页面只用于辅助信息整理和风险识别，不构成任何证券投资建议。</p>
     </section>
 
     <section id="settings" class="page">
-      <section class="install-box"><h3>添加到手机桌面</h3><p>用 Chrome / Edge 打开 GitHub Pages 地址，点击右上角菜单，选择“添加到主屏幕”或“安装应用”。</p><button class="primary-btn" id="installBtn">安装到桌面</button></section>
-
-      <section class="section settings-card">
-        <div class="section-title"><h3>市场数据源</h3><span id="lastUpdatedText">--</span></div>
-        <label class="field-label">市场 API 地址</label>
-        <input id="marketApiUrlInput" class="input" placeholder="./data/market.json" />
-        <button class="secondary-btn" id="saveMarketApiBtn">保存市场数据源</button>
-        <button class="secondary-btn" id="resetMarketApiBtn">恢复默认市场数据源</button>
+      <section class="install-box">
+        <h3>添加到手机桌面</h3>
+        <p>用 Chrome / Edge 打开 GitHub Pages 地址，点击右上角菜单，选择“添加到主屏幕”或“安装应用”。</p>
+        <button class="primary-btn" id="installBtn" type="button">安装到桌面</button>
       </section>
 
       <section class="section settings-card">
-        <div class="section-title"><h3>资产行情源</h3><span>OHLC</span></div>
+        <div class="section-title">
+          <h3>市场数据源</h3>
+          <span id="lastUpdatedText">--</span>
+        </div>
+        <label class="field-label">市场 API 地址</label>
+        <input id="marketApiUrlInput" class="input" placeholder="./data/market.json" />
+        <button class="secondary-btn" id="saveMarketApiBtn" type="button">保存市场数据源</button>
+        <button class="secondary-btn" id="resetMarketApiBtn" type="button">恢复默认市场数据源</button>
+      </section>
+
+      <section class="section settings-card">
+        <div class="section-title">
+          <h3>资产行情源</h3>
+          <span>OHLC</span>
+        </div>
         <label class="field-label">资产 API 地址，可包含 {symbol}</label>
         <input id="assetApiUrlInput" class="input" placeholder="./data/assets.json 或 https://api.xxx.com/asset/{symbol}" />
-        <button class="secondary-btn" id="saveAssetApiBtn">保存资产数据源</button>
-        <button class="secondary-btn" id="resetAssetApiBtn">恢复默认资产数据源</button>
+        <button class="secondary-btn" id="saveAssetApiBtn" type="button">保存资产数据源</button>
+        <button class="secondary-btn" id="resetAssetApiBtn" type="button">恢复默认资产数据源</button>
         <p class="help-text">真实行情接口必须放后端。前端不能保存行情 API Key 或 OpenAI Key。</p>
       </section>
 
-      <section class="section">
-        <div class="section-title"><h3>策略设置</h3><span>本地保存</span></div>
-        <div class="setting-row"><div><h4>风险优先</h4><p>当风险升高时，优先覆盖机会提示。</p></div><button class="switch on" data-setting="riskFirst"><span class="knob"></span></button></div>
-        <div class="setting-row"><div><h4>自动刷新</h4><p>打开 App 后定时刷新动态数据。</p></div><button class="switch on" data-setting="autoRefresh"><span class="knob"></span></button></div>
+
+      <section class="section settings-card">
+        <div class="section-title">
+          <h3>GitHub Pages 数据诊断</h3>
+          <span>路径检查</span>
+        </div>
+        <div class="diag-grid" id="diagGrid">
+          <div class="diag-item"><span>market.json</span><b id="diagMarket">未检查</b></div>
+          <div class="diag-item"><span>assets.json</span><b id="diagAssets">未检查</b></div>
+          <div class="diag-item"><span>Service Worker</span><b id="diagSW">未检查</b></div>
+          <div class="diag-item"><span>缓存版本</span><b id="diagCache">V4</b></div>
+        </div>
+        <button class="secondary-btn" id="runDiagBtn" type="button">检查数据路径</button>
+        <button class="secondary-btn" id="clearCacheBtn" type="button">清理本地缓存</button>
+        <p class="help-text">如果 data 文件夹建错，这里通常会显示 market.json 或 assets.json 读取失败。正确路径必须是 <code>data/market.json</code> 和 <code>data/assets.json</code>。</p>
+      </section>
+
+      <section class="section settings-card">
+        <div class="section-title">
+          <h3>本地策略</h3>
+          <span>自动保存</span>
+        </div>
+        <div class="setting-row">
+          <div>
+            <h4>风险优先</h4>
+            <p>当风险升高时，优先覆盖机会提示。</p>
+          </div>
+          <button class="switch on" data-setting="riskFirst" type="button"><span class="knob"></span></button>
+        </div>
+        <div class="setting-row">
+          <div>
+            <h4>自动刷新</h4>
+            <p>打开 App 后定时刷新市场数据。</p>
+          </div>
+          <button class="switch on" data-setting="autoRefresh" type="button"><span class="knob"></span></button>
+        </div>
       </section>
     </section>
 
     <nav class="bottom-nav">
-      <button class="nav-item active" data-page="home"><div>🏠</div>首页</button>
-      <button class="nav-item" data-page="model"><div>🧮</div>决策</button>
-      <button class="nav-item" data-page="track"><div>🧭</div>赛道</button>
-      <button class="nav-item" data-page="hot"><div>🔥</div>热点</button>
-      <button class="nav-item" data-page="radar"><div>📡</div>雷达</button>
-      <button class="nav-item" data-page="risk"><div>⚠️</div>风险</button>
-      <button class="nav-item" data-page="settings"><div>⚙️</div>设置</button>
+      <button class="nav-item active" data-page="home" type="button"><div>🏠</div>首页</button>
+      <button class="nav-item" data-page="model" type="button"><div>🧮</div>决策</button>
+      <button class="nav-item" data-page="track" type="button"><div>🧭</div>赛道</button>
+      <button class="nav-item" data-page="hot" type="button"><div>🔥</div>热点</button>
+      <button class="nav-item" data-page="radar" type="button"><div>📡</div>雷达</button>
+      <button class="nav-item" data-page="risk" type="button"><div>⚠️</div>风险</button>
+      <button class="nav-item" data-page="settings" type="button"><div>⚙️</div>设置</button>
     </nav>
-    <div id="toast" class="toast"></div>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
   </main>
+
   <script src="model.js"></script>
   <script src="app.js"></script>
 </body>
