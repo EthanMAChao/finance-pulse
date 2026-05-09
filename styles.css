@@ -204,3 +204,51 @@ button{cursor:pointer}
 @media (max-width:390px){
   .diag-grid{grid-template-columns:1fr}
 }
+
+
+/* V7 refinements */
+.result-card .metric-grid{
+  grid-template-columns:repeat(3,1fr);
+}
+@media (max-width:390px){
+  .result-card .metric-grid{grid-template-columns:1fr 1fr;}
+}
+.decision-card.result-card{
+  border-color:rgba(124,156,255,.22);
+  box-shadow:0 12px 32px rgba(0,0,0,.18);
+}
+
+
+/* V8 full market routing */
+.model-pill-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  margin:10px 0 12px;
+}
+.model-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:4px;
+  padding:7px 10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.10);
+  color:#d7ddec;
+  font-size:12px;
+}
+.model-pill.good{
+  color:var(--green);
+  border-color:rgba(57,217,138,.28);
+  background:rgba(57,217,138,.10);
+}
+.model-pill.warn{
+  color:var(--yellow);
+  border-color:rgba(255,209,102,.28);
+  background:rgba(255,209,102,.10);
+}
+.model-pill.bad{
+  color:var(--red);
+  border-color:rgba(255,107,107,.28);
+  background:rgba(255,107,107,.10);
+}

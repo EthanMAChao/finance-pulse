@@ -58,7 +58,7 @@
       <section class="hero hero-compact">
         <div class="sentiment">
           <h2>股票 / 基金决策</h2>
-          <p>V4 采用“高置信门槛 + 数据健康检查 + 风险阻断”。模型会先校验行情质量，再计算多周期指标与 walk-forward 回测。只有历史信号质量、趋势、风险和统计置信度同时达标时，才允许输出高置信机会。</p>
+          <p>V8 采用全市场代码路由、多行业模型、组合评分、市场环境过滤、新闻情绪与高置信回测。A股、ETF、美股代码会自动识别市场；未部署后端时使用本地样例跑通流程。</p>
         </div>
       </section>
 
@@ -129,7 +129,7 @@
       <section class="section" id="decisionOutput">
         <section class="ai-card">
           <h3>模型说明</h3>
-          <p>V3 会显示综合分、趋势分、动量分、风险分、历史胜率、Wilson 置信下界、Profit Factor、最大连续亏损和阻断原因。模型默认宁可错过，也不随意给买入提示。</p>
+          <p>V8 会显示综合分、趋势分、动量分、风险分、置信等级、市场环境、组合模型评分、模型解释、历史胜率、Wilson 置信下界、Profit Factor、最大连续亏损和阻断原因。模型默认宁可错过，也不随意给买入提示。</p>
         </section>
       </section>
     </section>

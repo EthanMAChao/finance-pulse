@@ -1,4 +1,4 @@
-const CACHE_NAME = 'finance-pulse-v5-20260510';
+const CACHE_NAME = 'finance-pulse-v8-20260511';
 const STATIC_ASSETS = [
   './',
   './index.html',
@@ -9,7 +9,8 @@ const STATIC_ASSETS = [
   './decision-worker.js',
   './manifest.webmanifest',
   './icon-192.png',
-  './icon-512.png'
+  './icon-512.png',
+  './data/universe.json'
 ];
 
 self.addEventListener('install', event => {

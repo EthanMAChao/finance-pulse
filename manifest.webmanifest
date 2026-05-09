@@ -1,7 +1,7 @@
 {
-  "name": "Finance Pulse V5",
+  "name": "Finance Pulse V8",
   "short_name": "FinancePulse",
-  "description": "动态行情、行业模型和新闻情绪决策 PWA V5",
+  "description": "全市场路由、多行业模型、新闻情绪和高置信回测 PWA V8",
   "start_url": "./index.html",
   "scope": "./",
   "display": "standalone",

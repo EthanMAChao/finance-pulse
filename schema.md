@@ -69,3 +69,46 @@ https://your-api.com/asset/{symbol}
 ```
 
 前端会自动根据 `sector`、`industry`、`name`、`assetType` 匹配模型。
+
+
+## V6 行业模型匹配字段
+
+前端会按以下字段自动匹配模型：
+
+- symbol
+- name
+- sector
+- industry
+- assetType
+
+如果后端不能返回 `sector` 或 `industry`，模型会退回到代码和名称关键词判断。
+
+
+## V7 推荐后端返回
+
+为了获得更好的行业模型匹配和情绪判断，建议资产 API 返回：
+
+- symbol
+- name
+- assetType
+- sector
+- industry
+- news
+- sentimentScore
+- prices
+
+如果缺少 sector / industry，前端会退回到 symbol 和 name 的关键词匹配。
+
+
+## V8 全市场路由
+
+前端识别规则：
+
+- 600/601/603/605/688 开头：沪市 A 股
+- 000/001/002/003/300/301 开头：深市 A 股
+- 50/51/52/56/58 开头：沪市 ETF/基金
+- 15/16 开头：深市 ETF/基金
+- 1-5位大写字母：美股/ETF
+- 0000.HK / 00000.HK：港股
+
+真实生产版本仍应以后端证券主数据为准。

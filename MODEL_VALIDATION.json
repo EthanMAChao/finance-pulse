@@ -72,5 +72,140 @@
       "Cloudflare Worker dynamic API template",
       "live API setting guidance"
     ]
+  },
+  "_v6": {
+    "version": "V6-fixed",
+    "generatedAt": "2026-05-09T06:16:56.199880+00:00",
+    "tests": {
+      "159915": {
+        "ok": true,
+        "profile": "宽基ETF模型",
+        "score": 53,
+        "action": "回避或仅观察",
+        "backtestSignals": 1,
+        "winRate": 0
+      },
+      "512480": {
+        "ok": true,
+        "profile": "行业ETF模型",
+        "score": 42,
+        "action": "回避或仅观察",
+        "backtestSignals": 0,
+        "winRate": 0
+      },
+      "600845": {
+        "ok": true,
+        "profile": "AI/软件模型",
+        "score": 72,
+        "action": "回避或仅观察",
+        "backtestSignals": 0,
+        "winRate": 0
+      },
+      "688185": {
+        "ok": true,
+        "profile": "医药/生物模型",
+        "score": 58,
+        "action": "回避或仅观察",
+        "backtestSignals": 0,
+        "winRate": 0
+      },
+      "DEMO_CYCLE": {
+        "ok": true,
+        "profile": "通用稳健模型",
+        "score": 49,
+        "action": "回避或仅观察",
+        "backtestSignals": 0,
+        "winRate": 0
+      }
+    },
+    "nodeExitCode": 0,
+    "fixes": [
+      "Web Worker global compatibility fixed",
+      "industry model profile injection fixed",
+      "unknown symbol fallback",
+      "expanded local stock/fund samples",
+      "TEST_REPORT generated after Node model tests"
+    ]
+  },
+  "_v7": {
+    "version": "V7",
+    "generatedAt": "2026-05-09T06:19:52.661771+00:00",
+    "allTestsPassed": true,
+    "testedSymbolsCount": 17,
+    "improvements": [
+      "expanded sample assets",
+      "ensemble sub-model scores",
+      "decision explanations",
+      "more industry model coverage",
+      "3x Node test runs"
+    ]
+  },
+  "_v8": {
+    "version": "V8",
+    "generatedAt": "2026-05-09T06:25:13.381376+00:00",
+    "allTestsPassed": true,
+    "summary": {
+      "neutral": {
+        "tested": 26,
+        "passed": 26,
+        "profiles": [
+          "AI/软件模型",
+          "债券/黄金/QDII模型",
+          "公用事业/红利模型",
+          "券商/金融弹性模型",
+          "医药/生物模型",
+          "宽基ETF模型",
+          "新能源/电动车模型",
+          "机器人/高端制造模型",
+          "消费/白酒模型",
+          "行业ETF模型",
+          "通用稳健模型",
+          "银行/保险模型"
+        ]
+      },
+      "weak": {
+        "tested": 26,
+        "passed": 26,
+        "profiles": [
+          "AI/软件模型",
+          "债券/黄金/QDII模型",
+          "公用事业/红利模型",
+          "券商/金融弹性模型",
+          "医药/生物模型",
+          "宽基ETF模型",
+          "新能源/电动车模型",
+          "机器人/高端制造模型",
+          "消费/白酒模型",
+          "行业ETF模型",
+          "通用稳健模型",
+          "银行/保险模型"
+        ]
+      },
+      "strong": {
+        "tested": 26,
+        "passed": 26,
+        "profiles": [
+          "AI/软件模型",
+          "债券/黄金/QDII模型",
+          "公用事业/红利模型",
+          "券商/金融弹性模型",
+          "医药/生物模型",
+          "宽基ETF模型",
+          "新能源/电动车模型",
+          "机器人/高端制造模型",
+          "消费/白酒模型",
+          "行业ETF模型",
+          "通用稳健模型",
+          "银行/保险模型"
+        ]
+      }
+    },
+    "improvements": [
+      "full market routing config",
+      "market regime filter",
+      "confidence tier A/B/C/D",
+      "expanded sample assets and ETFs",
+      "3 market scenarios x 26 symbols x 3 runs tested"
+    ]
   }
 }
